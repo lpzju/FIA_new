@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>迁移对抗性攻击</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/hd1.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/public.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <style>
+        img {
+            pointer-events: none;
+        }
+
+        #logDiv {
+            margin-top: 3%;
+            margin-left: 5%;
+            color: aliceblue;
+            font-size: medium;
+            overflow: scroll;
+            height: 90%;
+            width: 90%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            background-color: transparent;
+        }
+
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 8px transparent;
+            border-radius: 2px;
+            background-color: transparent;
+        }
+
+        .upload {
+            padding: 1px 10px;
+            height: 40px;
+            line-height: 40px;
+            position: relative;
+            border: #1f9ce9 1px solid;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            width: 50%;
+            margin-left: 9%;
+        }
+
+        .change {
+            position: absolute;
+            overflow: hidden;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            color: white;
+            border: #1f9ce9 1px solid;
+            background-color: transparent;
+            border-radius: 5px;
+            padding: 5% 15%;
+            margin-left: 7%;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="advheader advscrollTop">
+    <h1 class="advlogo">
+        <p>高迁移性对抗攻击平台</p>
+    </h1>
+    <div class="advh-inner">
+        <div class="advnav">
+
+            <ul class="advnav-ul">
+                <li class="advnav-item"><a href="">首页</a>
+                </li>
+                <li class="advnav-item"><a href="">AI软硬件协同安全攻防测试</a>
+                    <ul class="adver">
+                        <li><a href="">对抗样本测试</a></li>
+                        <li><a href="">后门攻防测试</a></li>
+                        <li><a href="">文本对抗测试</a></li>
+                    </ul>
+                </li>
+                <li class="advnav-item"><a href="" class="advactive">AI软硬件协同安全性能验证</a>
+                    <ul class="adver">
+                        <li><a href="">侧信道分析</a></li>
+                        <li><a href="">故障注入</a></li>
+                        <li><a href="" class="advactive">鲁棒性形式化验证</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="particles-js" class="main">
+    <div class="main_con">
+        <div class="main_top" style="margin-bottom: 50px;margin-top: 54px;">
+            <div class="main_top_middle" style="margin-left:18%;">
+                <div class="main_top_middle_top_title">
+                    <img class="title_bg" src="{{ url_for('static',filename='images/title_bg.png') }}"
+                         style="height: 800%;">
+                    高迁移性对抗攻击平台
+                </div>
+            </div>
+        </div>
+
+
+        <div class="main_bottom">
+            <div style="width: 13%;height: 100%; position: relative; float: left;">
+                <img src="{{ url_for('static',filename='images/main_top_bottom2.png') }}"
+                     style="position: absolute;height: 100%; width: 100%;pointer-events: none;">
+                <div class="main_top_echarts_con_title">输入选项</div>
+                <div style="width: 85%;padding: 5%;margin-left: 5%;" class="uploadDiv">
+                    <div>
+                            <form method="post"enctype="multipart/form-data" data-ajax="false">
+                                <input type="file" name="Files" id="Files" style="width: 100%;height: 20%;" multiple="multiple" value="上传Files" />
+                            </form>
+                        </div>
+                    <div class="btndiv" style="margin-top: 2%; width: 100%; margin-left: 20%;">
+
+                        <button class="filebtn" onclick="showOriFig()" style="height: 30%;margin-top: 25%">原始图像</button>
+                    </div>
+                    <div>
+                        <h5>替代模型</h5>
+                        <select name="" id="sourcemodel" onchange="nextChange()" class="form-control">
+                            <option value="" disabled selected hidden>请选择替代模型</option>
+                            <option value="VGG16">VGG16</option>
+                            <option value="InceptionV3">InceptionV3</option>
+                            <option value="InceptionResNetV2">InceptionResNetV2</option>
+                            <option value="ResNet152">ResNet152</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h5>中间层</h5>
+                        <select id="second" class="form-control">
+                            <option>请选择中间层</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <h5>最大扰动值</h5>
+                        <input type="text" class="form-control" placeholder="输入小于 1.0" id="max_move"
+                               onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
+                    </div>
+                    <div>
+                        <h5>总迭代次数</h5>
+                        <input type="text" class="form-control" placeholder="输入大于 0" id="move_times"
+                               onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
+                    </div>
+                    <div>
+                        <h5>单次迭代步长</h5>
+                        <input type="text" class="form-control" placeholder="输入大于 0" id="step_times"
+                               onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
+                    </div>
+
+                    <div class="btndiv" style="margin-top: 50%; width: 100%; margin-left: 20%;">
+                        <button class="filebtn" onclick="opt()">开始优化</button>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 52%;height: 100%; position: relative; float: left;">
+                <img src="{{ url_for('static',filename='images/main_top_bottom2.png') }}"
+                     style="position: absolute;height: 100%; width: 100%;">
+                <div
+                        style="width: 95%;height: 52%; position: relative; float: left; margin-left: 22px;margin-top: 10px;">
+                    <img src="{{ url_for('static',filename='images/main_top_bottom.png') }}"
+                         style="position: absolute;height: 100%; width: 100%;">
+                    <div class="main_top_echarts_con_title">中间过程</div>
+                    <div>
+                        <div class="main_top_echarts_con_title"
+                             style="font-size: 24px; float: left;margin-top: 4%;margin-left: 5%;">原始图像
+                        </div>
+                        <div style="width: 80%;height: 100%;float: right;">
+                            <canvas id='digi-accplot' width=600 height=110
+                                    style="margin-top: 1%;margin-left: 40%;  float: right;"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="main_top_echarts_con_title"
+                             style="font-size: 24px; float: left;margin-top: 9.5%;margin-left: 5%;">中间特征
+                        </div>
+                        <div style="width: 80%;height: 100%;float: right;">
+                            <canvas id='digi-accspec' width=600 height=110
+                                    style="margin-top: 3%;margin-left: 40%;float:right"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="main_top_echarts_con_title"
+                             style="font-size: 24px; float: left;margin-top: 8%;margin-left: 5%;">对抗图像
+                        </div>
+                        <div style="width: 80%;height: 100%;float: right;">
+                            <canvas id='digi-slice' width=600 height=110
+                                    style="margin-top: -1%;margin-left: 40%;float:right"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="width: 95%;height: 46%; position: relative; float: left; margin-left: 22px;">
+
+                    <img src="{{ url_for('static',filename='images/main_top_bottom.png') }}"
+                         style="position: absolute;height: 100%; width: 100%;">
+                    <div class="main_top_echarts_con_title">黑盒模型测试</div>
+
+
+                    <div style="float: left;width: 15%;">
+                        <div class="main_top_echarts_con_title" style="margin-left: 10%;margin-top: 15%;">
+                                <span
+                                        style="font-size: 14px;margin-left: 5%;margin-top: 10%;">红色代表目标模型错误分类，绿色代表正确分类。</span>
+                        </div>
+
+                        <button class="filebtn" style="margin-top: 20%;margin-left: 30%;font-size: 18px;"
+                                onclick="showPreResult()">启动
+                        </button>
+
+                    </div>
+                    <div style="width: 85%;height: 100%;float: right;">
+                        <div id="heap" style="width: 100%;height: 140%; margin-top: .1%;"></div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div style="width: 35%;height: 100%; position: relative; float: left;">
+
+
+                <img src="{{ url_for('static',filename='images/main_top_bottom2.png') }}"
+                     style="position: absolute;height: 100%; width: 100%;">
+                <div class="main_top_echarts_con_title">
+                <div style="width: 50%;">
+                    <div style="width: 100%;height: 20%;margin-left: 9%;margin-top: 10%;font-size: 24px;color: white;position: relative; float: left;">
+                        可迁移对抗样本
+                    </div>
+                    
+                    <div style="width: 165%;height: 20%;margin-left: 23%;margin-top: 3%;font-size: 18px;color: white;position: relative; float: left;">
+                        针对某个模型生成的对抗样本也有可能能误导其他模型，因此可通过提升其迁移性来实现黑盒攻击
+                    </div>
+                    
+                    <div style="width: 100%;height: 20%;margin-left: 9%;margin-top: 10%;font-size: 24px;color: white;position: relative; float: left;">
+                        所提方案原理
+                    </div>
+                    
+                    <div style="width: 165%;height: 20%;margin-left: 23%;margin-top: 3%;font-size: 18px;color: white;position: relative; float: left;">
+                        鉴于不同模型均关注于图像上目标相关的特征进行判别，因此可通过在优化过程中引入特征重要性来引导对抗样本尽可能破坏目标相关的重要特征来提升其迁移性
+                    </div>
+                    
+
+                </div>
+                <div style="width: 100%">
+                
+                     <embed src="{{ url_for('static',filename='images/framework_v1_white_v3.svg') }}" width="600" height="600" 
+                     type="image/svg+xml"
+                     />
+                </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+
+</html>
+
+<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+
+<script src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/dataScoll.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/digitalScroll.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/jcarousellite.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/particles.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static',filename='js/app.js') }}"></script>
+
+<script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+<script src="{{ url_for('static',filename='js/mainFunc_copy.js') }}"></script>
+
+<script>
+    function opt() {
+
+        showFeaFig();
+        optimize();
+        setTimeout("showAdvFig()", 5000)
+    }
+</script>
+<script>
+    function nextChange() {
+        var first = document.getElementById("sourcemodel");
+        var second = document.getElementById("second");
+        second.options.length = 0; // 清除second下拉框的所有内容
+        if (first.selectedIndex == 1) {
+            second.options.add(new Option("Conv1_2", "0", false, true));  // 默认选中区
+            second.options.add(new Option("Conv2_2", "4"));
+            second.options.add(new Option("Conv3_3", "2"));
+            second.options.add(new Option("Conv4_3", "2"));
+            second.options.add(new Option("Conv5_3", "1"));
+        }
+
+        if (first.selectedIndex == 2) {
+            second.options.add(new Option("Conv2d_2b", "0", false, true));  // 默认选中区
+            second.options.add(new Option("Conv2d_4a", "1"));
+            second.options.add(new Option("Mixed_5b", "2"));
+            second.options.add(new Option("Mixed_6a", "3"));
+            second.options.add(new Option("Mixed_7a", "4"));
+        }
+
+        if (first.selectedIndex == 3) {
+            second.options.add(new Option("Conv2d_2b", "0", false, true));  // 默认选中区
+            second.options.add(new Option("Conv2d_4a", "1"));
+            second.options.add(new Option("Mixed_5b", "2"));
+            second.options.add(new Option("Mixed_6a", "3"));
+            second.options.add(new Option("Mixed_7a", "4"));
+        }
+
+        if (first.selectedIndex == 4) {
+            second.options.add(new Option("block1/unit_3", "0", false, true));  // 默认选中区
+            second.options.add(new Option("block1/unit_8", "1"));
+            second.options.add(new Option("block1/unit_18", "2"));
+            second.options.add(new Option("block1/unit_36", "3"));
+            second.options.add(new Option("block1/unit_3", "4"));
+        }
+    }
+
+</script>

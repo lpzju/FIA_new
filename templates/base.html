@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head>
+<body>
+{% block head %}
+<div id="head">
+    <ul>
+        <li><a href="#">首页</a></li>
+        <li><a href="#">养生新闻</a></li>
+        <li><a href="#">人群养生</a></li>
+        <li><a href="#">两性养生</a></li>
+        <li><a href="#">生活养生</a></li>
+        <li><a href="#">饮食养生</a></li>
+        <li><a href="#">中医养生</a></li>
+    </ul>
+</div>
+<div class="cl_btoh"></div>
+{% endblock %}
+
+
+{% block main %}
+<div id="main">
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type=submit value=upload>
+    </form>
+    <h4>这是index页面主体部分</h4>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="footer">
+    <h4>网站底部内容</h4>
+</div>
+{% endblock %}
+</body>
+</html>
