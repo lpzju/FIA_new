@@ -328,7 +328,8 @@ function colormapa(r,a){
     }
     function showPreResult(){
         var opt = $("#sourcemodel option:selected").val();
-        //console.log(opt+"haha");
+        // var opt = $("#box_select checked").val();
+        console.log(opt+"haha");
         var tempdata = Label[opt];
         
         var tempH = value[opt];
