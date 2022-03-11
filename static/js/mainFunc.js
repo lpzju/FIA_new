@@ -122,7 +122,7 @@ function at(w,x,y,c){
 }
 
 function req(fn){
-    return 'http://127.0.0.1:5501/res/'+fn+'?t='+Math.random()
+    return 'http://127.0.0.1:5000/res/'+fn+'?t='+Math.random()
 }
      
 function colormap(r){
@@ -331,7 +331,7 @@ function colormapa(r,a){
         // var opt = $("#box_select checked").val();
         console.log(opt+"haha");
         var tempdata = Label[opt];
-        
+        console.log(tempdata);
         var tempH = value[opt];
         var heatmapData = [];
         var data = []

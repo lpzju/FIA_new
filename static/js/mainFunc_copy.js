@@ -121,9 +121,7 @@ function at(w,x,y,c){
     return y*w*4+x*4+c
 }
 
-function req(fn){
-    return 'http://127.0.0.1:5501/res/'+fn+'?t='+Math.random()
-}
+
      
 function colormap(r){
     var h = Math.floor(r*120+240)%360
@@ -168,7 +166,7 @@ function colormapa(r,a){
 
         var img = new Image()
         img.crossOrigin = "Anonymous"
-        img.src = req(imgsrc)           
+        img.src = req(imgsrc)
         
         img.onload = function(){
             var tmpcvx = document.createElement('canvas')
@@ -280,7 +278,9 @@ function colormapa(r,a){
     function showFeaFig(){
         
         var obj=document.getElementById("sourcemodel")
+        console.log("obj为"+obj)
         vm.sourceModel=obj.options[obj.selectedIndex].value
+        console.log("vm为"+vm.sourceModel)
 
         w=100
         for (var i=0;i<7;i++){
@@ -328,7 +328,7 @@ function colormapa(r,a){
     }
     function showPreResult(){
         var opt = $("#sourcemodel option:selected").val();
-        //console.log(opt+"haha");
+        console.log(opt+"haha");
         var tempdata = Label[opt];
         
         var tempH = value[opt];

@@ -122,8 +122,8 @@
                 <div class="main_top_echarts_con_title">输入选项</div>
                 <div style="width: 85%;padding: 5%;margin-left: 5%;" class="uploadDiv">
                     <div>
-                        <form method="post" enctype="multipart/form-data" data-ajax="false" class="upload">上传文件
-                            <input type="file" name="Files" id="Files" class="change" style="width: 100%;height: 100%;"
+                        <form method="post" enctype="multipart/form-data" data-ajax="false" class="upload">上传
+                            <input type="file" name="Files" id="Files" class="change" style="width: 150%;height: 100%;"
                                    multiple="multiple" value=上传Files>
                         </form>
                     </div>
@@ -133,7 +133,7 @@
                     </div>
                     <div>
                         <h5>替代模型</h5>
-                        <select name="" id="sourcemodel2" onchange="nextChange()" class="form-control">
+                        <select name="" id="sourcemodel" onchange="nextChange()" class="form-control">
                             <option value="" >请选择替代模型</option>
 {#                            disabled selected hidden#}
                             <option value="VGG16">VGG16</option>
@@ -214,7 +214,7 @@
                          style="position: absolute;height: 100%; width: 100%;">
                     <div class="main_top_echarts_con_title" style="margin-left: 5%;margin-top: 2%">请选择模型
 
-                        <select name="" id="sourcemodel" class="form-control" style="margin-left: 15%;margin-top:-2%;width: 10%;background: white;color: black">
+                        <!-- <select name="" id="sourcemodel" class="form-control" style="margin-left: 15%;margin-top:-2%;width: 10%;background: white;color: black">
 {#                            <input type="radio" id="sourcemodel" name="black_box" value="1">模型一#}
 {#                        <input type="radio" id="sourcemodel" name="black_box" value="2">模型二#}
 {#                        <input type="radio" id="sourcemodel" name="black_box" value="3">模型三#}
@@ -226,7 +226,7 @@
                             <option value="InceptionV3">模型3</option>
                             <option value="InceptionResNetV2">模型4</option>
                             <option value="ResNet152">模型5</option>
-                        </select>
+                        </select> -->
 
 
                     </div>
@@ -244,6 +244,12 @@
 
                     </div>
                     <div style="width: 85%;height: 100%;float: right;">
+                        <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型1</div>
+	                    
+                        <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型2</div>
+	                    <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型3</div>
+	                    <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型4</div>
+                        <div class = "col-md-2"  style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型5</div>
                         <div id="heap" style="width: 100%;height: 140%; margin-top: .1%;">
 
                         </div>
@@ -316,8 +322,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
 <script src="{{ url_for('static',filename='js/mainFunc_copy.js') }}"></script>
-
 <script>
+    function req(fn){
+
+       var ret = "{{ url_for('static',filename='res/') }}" + fn
+    console.log("这是："+ret)
+    return 'http://127.0.0.1:5000/static/res/'+fn+'?t='+Math.random()
+}
+
+</script>
+<script>
+
+
     function opt() {
 
         showFeaFig();
@@ -327,7 +343,7 @@
 </script>
 <script>
     function nextChange() {
-        var first = document.getElementById("sourcemodel2");
+        var first = document.getElementById("sourcemodel");
         var second = document.getElementById("second");
         second.options.length = 0; // 清除second下拉框的所有内容
         if (first.selectedIndex == 1) {
