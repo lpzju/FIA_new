@@ -41,17 +41,17 @@
         }
 
         .upload {
-            padding: 1px 10px;
-            height: 40px;
-            line-height: 40px;
+            padding: 1px 17px 12px 12px;
+            height: 32px;
+            line-height: 32px;
             position: relative;
             border: #1f9ce9 1px solid;
             border-radius: 5px;
             text-decoration: none;
             color: white;
-            width: 50%;
-            margin-left: 28%;
-            font-size: 18px;
+            width: 32%;
+            margin-left: 30%;
+            font-size: 1.5rem;
         }
 
         .change {
@@ -119,19 +119,19 @@
             <div style="width: 13%;height: 100%; position: relative; float: left;">
                 <img src="{{ url_for('static',filename='images/main_top_bottom2.png') }}"
                      style="position: absolute;height: 100%; width: 100%;pointer-events: none;">
-                <div class="main_top_echarts_con_title">输入选项</div>
+                <div class="main_top_echarts_con_title" style="font-size: 2rem;margin-top: 6%;margin-left: 8% ">输入选项</div>
                 <div style="width: 85%;padding: 5%;margin-left: 5%;" class="uploadDiv">
-                    <div>
+                    <div style="">
                         <form method="post" enctype="multipart/form-data" data-ajax="false" class="upload">上传
-                            <input type="file" name="Files" id="Files" class="change" style="width: 150%;height: 100%;"
+                            <input type="file" name="Files" id="Files" class="change" style="width: 150%;height: 80%;"
                                    multiple="multiple" value=上传Files>
                         </form>
                     </div>
-                    <div class="btndiv" style="margin-top: 2%; width: 100%; margin-left: 20%;">
+                    <div class="btndiv" style="margin-top: 1%; width: 60%; margin-left: 20%;">
 
-                        <button class="filebtn" onclick="showOriFig()" style="height: 30%;margin-top: 12%">原始图像</button>
+                        <button class="filebtn" onclick="showOriFig()" style="height: 30%;margin-top: 12%;font-size: 1.5rem">显示图像</button>
                     </div>
-                    <div>
+                    <div class="text-border">
                         <h5>替代模型</h5>
                         <select name="" id="sourcemodel" onchange="nextChange()" class="form-control">
                             <option value="" >请选择替代模型</option>
@@ -142,30 +142,30 @@
                             <option value="ResNet152">ResNet152</option>
                         </select>
                     </div>
-                    <div>
+                    <div class="text-border">
                         <h5>中间层</h5>
                         <select id="second" class="form-control">
                             <option>请选择中间层</option>
                         </select>
                     </div>
 
-                    <div>
+                    <div class="text-border">
                         <h5>最大扰动值</h5>
-                        <input type="text" class="form-control" placeholder="输入小于 1.0" id="max_move"
+                        <input type="text" class="form-control" placeholder="输入大于 0" id="max_move"
                                onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
                     </div>
-                    <div>
+                    <div class="text-border">
                         <h5>总迭代次数</h5>
                         <input type="text" class="form-control" placeholder="输入大于 0" id="move_times"
                                onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
                     </div>
-                    <div>
+                    <div class="text-border">
                         <h5>单次迭代步长</h5>
                         <input type="text" class="form-control" placeholder="输入大于 0" id="step_times"
                                onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
                     </div>
 
-                    <div class="btndiv" style="margin-top: 50%; width: 100%; margin-left: 20%;">
+                    <div class="btndiv text-border" style="margin-top: 50%; width: 100%; margin-left: 20%;">
                         <button class="filebtn" onclick="opt()">开始优化</button>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                         style="width: 95%;height: 52%; position: relative; float: left; margin-left: 22px;margin-top: 10px;">
                     <img src="{{ url_for('static',filename='images/main_top_bottom.png') }}"
                          style="position: absolute;height: 100%; width: 100%;">
-                    <div class="main_top_echarts_con_title">中间过程</div>
+                    <div class="main_top_echarts_con_title" style="font-size: 1.5rem;margin-top: 2%;margin-left: 2%">中间过程</div>
                     <div>
                         <div class="main_top_echarts_con_title"
                              style="font-size: 24px; float: left;margin-top: 4%;margin-left: 5%;">原始图像
@@ -212,7 +212,10 @@
 
                     <img src="{{ url_for('static',filename='images/main_top_bottom.png') }}"
                          style="position: absolute;height: 100%; width: 100%;">
-                    <div class="main_top_echarts_con_title" style="margin-left: 5%;margin-top: 2%">请选择模型
+
+                    <div class="main_top_echarts_con_title" style="margin-left: 5%;margin-top: 2%;font-size: 1.4rem;">黑盒模型测试
+                        <br>
+                        请选择模型
 
                         <!-- <select name="" id="sourcemodel" class="form-control" style="margin-left: 15%;margin-top:-2%;width: 10%;background: white;color: black">
 {#                            <input type="radio" id="sourcemodel" name="black_box" value="1">模型一#}
@@ -233,9 +236,9 @@
 
 
                     <div style="float: left;width: 15%;">
-                        <div class="main_top_echarts_con_title" style="margin-left: 10%;margin-top: 15%;">
+                        <div class="main_top_echarts_con_title" style="margin-left: 20%;margin-top: 15%;float: left;">
                                 <span
-                                        style="font-size: 14px;margin-left: 5%;margin-top: 10%;">红色代表目标模型错误分类，绿色代表正确分类。</span>
+                                        style="font-size: 14px;margin-left: 8%;margin-top: 10%;">红色代表目标模型错误分类，绿色代表正确分类。</span>
                         </div>
 
                         <button class="filebtn" style="margin-top: 20%;margin-left: 30%;font-size: 18px;"
@@ -243,13 +246,15 @@
                         </button>
 
                     </div>
-                    <div style="width: 85%;height: 100%;float: right;">
-                        <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型1</div>
+                    <div style="width: 85%;height: 100%;float: right;margin-top: -5%;font-size: 1.5rem">
+                        <div class = "col-md-2" style="color: aqua;margin-left: 1%"><input type="checkbox" class="form-check-input" value="">InceptionV3</div>
 	                    
-                        <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型2</div>
-	                    <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型3</div>
-	                    <div class = "col-md-2" style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型4</div>
-                        <div class = "col-md-2"  style="color: aqua;"><input type="checkbox" class="form-check-input" value="">模型5</div>
+                        <div class = "col-md-2" style="color: aqua;margin-left: -4%"><input type="checkbox" class="form-check-input" value="">InceptionV4</div>
+	                    <div class = "col-md-2" style="color: aqua;margin-left: -4%;"><input type="checkbox" class="form-check-input" value="">ResnetV2</div>
+	                    <div class = "col-md-2" style="color: aqua;margin-left: -4%"><input type="checkbox" class="form-check-input" value="">Resnet50</div>
+                        <div class = "col-md-2"  style="color: aqua;margin-left: -4%"><input type="checkbox" class="form-check-input" value="">Resnet152</div>
+                        <div class = "col-md-2" style="color: aqua;margin-left: -5%"><input type="checkbox" class="form-check-input" value="">VGG16</div>
+                        <div class = "col-md-2"  style="color: aqua;margin-left: -5%"><input type="checkbox" class="form-check-input" value="">VGG19</div>
                         <div id="heap" style="width: 100%;height: 140%; margin-top: .1%;">
 
                         </div>
@@ -287,7 +292,7 @@
                     </div>
                     <div style="width: 100%">
 
-                        <embed src="{{ url_for('static',filename='images/framework_v1_white_v3.svg') }}" width="600"
+                        <embed src="{{ url_for('static',filename='images/framework_v1_white_v4.svg') }}" width="600"
                                height="600"
                                type="image/svg+xml"
                         />
