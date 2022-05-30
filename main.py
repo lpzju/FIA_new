@@ -44,8 +44,10 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # file_url = url_for('uploaded_file', filename=filename)
             # return html + '<br><img src=' + file_url + '>'
-    return render_template("hhhh.html")
+    # return render_template("hhhh.html")
+    return render_template("FIA_v2.html")
 
 
 if __name__ == '__main__':
+    # app.run(host='0.0.0.0', port='14140', debug=True)
     app.run(debug=True)
