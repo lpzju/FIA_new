@@ -661,16 +661,19 @@
         }
 
         .btndiv{
-            
-            width: 50%;
+            width: 30%;
+            height: fit-content;
             margin-top: 30%;
             margin-left: 35%;
             font-size: large;
-        
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
         }
-        .text-border{
-            margin-top: 10%;
-        }
+        /*.text-border{*/
+        /*    margin-top: 2%;*/
+        /*}*/
         .filebtn {
             color: white;
             border:#1f9ce9  1px solid;
@@ -702,5 +705,23 @@
             color: white;
             border: 1px solid #99D3F5;
         }
-
-        
+        .explain {
+            width: 90%;
+            height: 20%;
+            margin: 1% 5%;
+            font-size: medium;
+            color: white;
+            position: relative;
+            float: left;
+        }
+        .model_input {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            color: whitesmoke;
+            margin: 2% 0% 0% 10%;
+        }
+        .h5_class {
+            width: 35%;
+            font-size: medium;
+        }

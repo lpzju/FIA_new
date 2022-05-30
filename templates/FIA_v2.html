@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迁移对抗性攻击</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/hd1.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/public.css') }}">
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <style>
+        img {
+            pointer-events: none;
+        }
+
+        #logDiv {
+            margin-top: 3%;
+            margin-left: 5%;
+            color: aliceblue;
+            font-size: medium;
+            overflow: scroll;
+            height: 90%;
+            width: 90%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            background-color: transparent;
+        }
+
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 8px transparent;
+            border-radius: 2px;
+            background-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+<div class="advheader advscrollTop">
+    <h1 class="advlogo">
+        <p>高迁移性对抗攻击平台</p>
+    </h1>
+    <div class="advh-inner">
+        <div class="advnav">
+
+            <ul class="advnav-ul">
+                <li class="advnav-item"><a href="http://10.15.201.88:14115/">首页</a>
+                </li>
+                <li class="advnav-item"><a href="">AI软硬件协同安全攻防测试</a>
+                    <ul class="adver">
+                        <li><a href="http://10.15.201.88:14115/get_adv_input">【指标5.1】软硬件协同攻防测试</a></li>
+                        <li><a href="http://10.15.201.88:14115/get_gnn_input">【指标4.1】模型鲁棒性训练</a></li>
+                    </ul>
+                </li>
+                <li class="advnav-item"><a href="">AI软硬件协同安全性能验证</a>
+                    <ul class="adver">
+                        <li><a href="http://10.15.201.88:10088/side">【指标3.1/5.2】侧信道分析</a></li>
+                        <li><a href="http://10.15.201.88:10088/inject">【指标3.2/5.2】故障注入</a></li>
+                        <li><a href="http://10.15.201.88:10088/robust" class="pltactive">【指标4.2/5.2】鲁棒性形式化验证</a></li>
+                    </ul>
+                </li>
+                <li class="advnav-item"><a href="">全周期安全性评估</a>
+                    <ul class="adver">
+                        <li><a href="http://10.15.201.88:10087/DataCollection">全周期安全性评估</a></li>
+                    </ul>
+                </li>
+                <li class="advnav-item"><a href="" class="advactive">高迁移性对抗攻击平台</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="particles-js" class="main">
+    <div class="main_con">
+        <div class="main_top" style="margin-bottom: 50px;margin-top: 54px;">
+            <div class="main_top_middle" style="margin-left:18%;">
+                <div class="main_top_middle_top_title">
+                    <img class="title_bg" src="../static/images/title_bg.png" style="height: 800%;">
+                    高迁移性对抗攻击平台
+                </div>
+            </div>
+        </div>
+
+        <div class="main_bottom">
+            <div style="width: 33%;height: 100%; position: relative; float: left;">
+                <img src="../static/images/main_top_bottom2.png"
+                     style="position: absolute;height: 100%; width: 100%;pointer-events: none;">
+                <div class="main_top_echarts_con_title">解释说明</div>
+                <div style="width: 100%;">
+                    <div class="explain">
+                        <h3>可迁移对抗样本</h3>
+                        针对某个模型生成的对抗样本也有可能能误导其他模型，因此可通过提升其迁移性来实现黑盒攻击。
+                    </div>
+                    <div class="explain">
+                        <h3>所提方案原理</h3>
+                        鉴于不同模型均关注于图像上目标相关的特征进行判别，因此可通过在优化过程中引入特征重要性来引导对抗样本尽可能破坏目标相关的重要特征来提升其迁移性。
+                    </div>
+                    <div style="width: 100%; margin: 0% 5%" >
+                        <embed src="{{url_for('static',filename='images/framework_v1_white_v4.svg') }}" width=90%
+                               height=30%
+                               type="image/svg+xml"/>
+                    </div>
+                    <div class="explain">
+                        <h3>迁移攻击过程</h3>
+                        对于某个模型，通过添加扰动生成对抗样本，再使用生成的对抗样本进行黑盒模型测试，考察迁移性。
+                    </div>
+                </div>
+            </div>
+            <div style="width: 67%;height: 102%; position: relative; float: left;">
+                <img src="../static/images/main_top_bottom.png"
+                     style="position: absolute;height: 100%; width: 100%;pointer-events: none;">
+                <div style="width: 100%;height: 48%; position: relative; float: left;">
+                    <img src="../static/images/main_top_bottom.png"
+                     style="position: absolute;height: 100%; width: 98%;pointer-events: none; margin: 1%">
+                    <div class="main_top_echarts_con_title" style="margin-left: 3%; margin-top: 1.5%">对抗样本生成</div>
+                    <div style="width: 30%;height: 40%; margin: 0.5% 1%;float:left">
+                        <img src="../static/images/main_top_bottom.png"
+                            style="position: absolute;height: 92%; width: 30%;pointer-events: none; margin: 0% 1%; margin-top: -0.5%">
+                        <div class="main_top_echarts_con_title" style="margin-left: 8%; margin-top: auto">输入选项</div>
+                        <div class="model_input">
+                            <h5 class="h5_class">替代模型</h5>
+                            <select name="" id="sourcemodel" onchange="nextChange()" class="form-control" style="width: 60%;color: black;">
+                                <option value=""  >请选择替代模型</option>
+                                disabled selected hidden
+                                <option value="VGG16">VGG16</option>
+                                <option value="InceptionV3">InceptionV3</option>
+                                <option value="InceptionResNetV2">InceptionResNetV2</option>
+                                <option value="ResNet152">ResNet152</option>
+                            </select>
+                        </div>
+                        <div class="model_input">
+                            <h5 class="h5_class">中间层</h5>
+                            <select id="second" class="form-control" style="width: 60%;color: black;">
+                                <option>请选择中间层</option>
+                            </select>
+                        </div>
+                        <div class="model_input">
+                            <h5 class="h5_class">最大扰动值</h5>
+                            <input type="text" class="form-control" style="width: 60%;color: black;"
+                                   placeholder="输入大于 0" id="max_move"
+                                           onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
+                        </div>
+                        <div class="model_input">
+                            <h5 class="h5_class">总迭代次数</h5>
+                            <input type="text" class="form-control" style="width: 60%;color: black;"
+                                   placeholder="输入大于 0" id="move_times"
+                                           onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
+                        </div>
+                        <div class="model_input">
+                            <h5 class="h5_class">单次迭代步长</h5>
+                            <input type="text" class="form-control" style="width: 60%;color: black;"
+                                   placeholder="输入大于 0" id="step_times"
+                                           onkeyup="value=value.replace(/^0\d|[^\d.]/g,'')">
+                        </div>
+                        <div class="model_input">
+                            <div class="btndiv" id="btn_file" style="margin-top: 3%;margin-left: 0%;float: left; padding:0 5%">
+                                <button class="filebtn" onclick="upload.click()">上传数据</button>
+                                <input type="file" name="upload" id="upload" style="display: none;" />
+                            </div>
+                            <div class="btndiv" style="margin-top: 3%;margin-left: 0%;float: left; padding:0 5%">
+                                <button class="filebtn" onclick="showOriFig()">显示图像</button>
+                            </div>
+                            <div class="btndiv" style="margin-top: 3%;margin-left: 0%;float: left; padding:0 5%">
+                                <button class="filebtn" onclick="opt()">开始优化</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 66.5%;height: 92%; position: relative; float: left;">
+                        <img src="{{url_for('static',filename='images/main_top_bottom.png') }}"
+                             style="position: absolute;height: 100%; width: 100%;">
+                        <div class="main_top_echarts_con_title">中间过程</div>
+                        <div>
+                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:0 2%; float:left;">原始图像</div>
+                            <div style="width: 80%;height: 100%;float: right;">
+                                <canvas id='digi-accplot' width=600 height=120
+                                        style="margin-top: 1%;margin-right: 10%;  float: right;"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:9.5% 2% 0% 2%; float:left;">中间特征
+                            </div>
+                            <div style="width: 80%;height: 100%;float: right;">
+                                <canvas id='digi-accspec' width=600 height=110
+                                        style="margin-top: 3%;margin-right: 10%;float:right"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:9.5% 2% 0% 2%">对抗图像
+                            </div>
+                            <div style="width: 80%;height: 100%;float: right;">
+                                <canvas id='digi-slice' width=600 height=110
+                                        style="margin-top: -1%;margin-right: 10%;float:right"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 100%;height: 48%; position: relative; float: left;">
+                    <img src="../static/images/main_top_bottom.png"
+                     style="position: absolute;height: 100%; width: 98%;pointer-events: none; margin: 1%">
+                    <div class="main_top_echarts_con_title" style="margin-left: 3%; margin-top: 1.7%">黑盒测试</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/echarts.min.js"></script>
+<script type="text/javascript" src="../static/js/dataScoll.js"></script>
+<script type="text/javascript" src="../static/js/digitalScroll.js"></script>
+<script type="text/javascript" src="../static/js/jcarousellite.js"></script>
+<script type="text/javascript" src="../static/js/particles.min.js"></script>
+<script type="text/javascript" src="../static/js/app.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+{#<script type="text/javascript" src="../static/js/FIA_v2.js"></script>#}
+<script type="text/javascript" src="../static/js/mainFunc.js"></script>

@@ -122,7 +122,8 @@ function at(w,x,y,c){
 }
 
 function req(fn){
-    return 'http://127.0.0.1:5000/res/'+fn+'?t='+Math.random()
+    // return 'http://127.0.0.1:5000/res/'+fn+'?t='+Math.random()
+    return 'http://10.99.140.140:14120/home/Wenjie/FIA_new/res'+fn+'?t='+Math.random()
 }
      
 function colormap(r){
@@ -461,5 +462,52 @@ function colormapa(r,a){
 
     }
 
+function UploadData() {
+    document.getElementById("btn_file").click();
+}
+
+function opt() {
+
+    showFeaFig();
+    optimize();
+    setTimeout("showAdvFig()", 5000)
+}
+
+function nextChange() {
+    var first = document.getElementById("sourcemodel");
+    var second = document.getElementById("second");
+    second.options.length = 0; // 清除second下拉框的所有内容
+    if (first.selectedIndex == 1) {
+        second.options.add(new Option("Conv1_2", "0", false, true));  // 默认选中区
+        second.options.add(new Option("Conv2_2", "4"));
+        second.options.add(new Option("Conv3_3", "2"));
+        second.options.add(new Option("Conv4_3", "2"));
+        second.options.add(new Option("Conv5_3", "1"));
+    }
+
+    if (first.selectedIndex == 2) {
+        second.options.add(new Option("Conv2d_2b", "0", false, true));  // 默认选中区
+        second.options.add(new Option("Conv2d_4a", "1"));
+        second.options.add(new Option("Mixed_5b", "2"));
+        second.options.add(new Option("Mixed_6a", "3"));
+        second.options.add(new Option("Mixed_7a", "4"));
+    }
+
+    if (first.selectedIndex == 3) {
+        second.options.add(new Option("Conv2d_2b", "0", false, true));  // 默认选中区
+        second.options.add(new Option("Conv2d_4a", "1"));
+        second.options.add(new Option("Mixed_5b", "2"));
+        second.options.add(new Option("Mixed_6a", "3"));
+        second.options.add(new Option("Mixed_7a", "4"));
+    }
+
+    if (first.selectedIndex == 4) {
+        second.options.add(new Option("block1/unit_3", "0", false, true));  // 默认选中区
+        second.options.add(new Option("block1/unit_8", "1"));
+        second.options.add(new Option("block1/unit_18", "2"));
+        second.options.add(new Option("block1/unit_36", "3"));
+        second.options.add(new Option("block1/unit_3", "4"));
+    }
+}
 
 

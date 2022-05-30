@@ -9,8 +9,8 @@
 
 .advh-inner {
     position: relative;
-    /* width: 76.875%; */
-    width: 914px;
+    width: 76.875%;
+    /*width: 914px;*/
     height: 54px;
     margin: 0 auto;
 }
@@ -45,7 +45,7 @@
 
 .advnav-item {
     position: relative;
-    padding: 0 38px;
+    padding: 0 10px;
     display: inline-block;
     height: 54px;
 }
