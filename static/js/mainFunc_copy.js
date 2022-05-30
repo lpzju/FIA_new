@@ -124,7 +124,8 @@ function at(w,x,y,c){
 function req(fn){
        var ret = "{{ url_for('static',filename='res/') }}" + fn
     console.log("这是："+ret)
-    return 'http://127.0.0.1:5000/static/res/'+fn+'?t='+Math.random()
+    return 'http://10.99.140.140:14140/static/res/'+fn+'?t='+Math.random()
+
 }
      
 function colormap(r){
