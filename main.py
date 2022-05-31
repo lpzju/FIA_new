@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import os
 from flask import Flask, request, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
@@ -37,15 +38,25 @@ def uploaded_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # file_url = url_for('uploaded_file', filename=filename)
-            # return html + '<br><img src=' + file_url + '>'
-    # return render_template("hhhh.html")
-    return render_template("FIA_v2.html")
+    if request.method == "GET":
+        return render_template("FIA_v2.html")
+    else:
+        paras = {
+            "model_name": request.form.get("modal"),
+            "layer_name": request.form.get("layer"),
+            "max_epsilon": request.form.get("max_mv"),
+            "num_iter": request.form.get("mv_times"),
+            "alpha": request.form.get("stp_times"),
+        }
+        print(paras)
+        return json.dumps({"states": "success"})
+        # file = request.files['file']
+        # if file and allowed_file(file.filename):
+        #     filename = secure_filename(file.filename)
+        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # file_url = url_for('uploaded_file', filename=filename)
+        # return html + '<br><img src=' + file_url + '>'
+
 
 
 if __name__ == '__main__':

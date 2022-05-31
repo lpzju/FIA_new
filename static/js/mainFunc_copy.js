@@ -122,9 +122,10 @@ function at(w,x,y,c){
 }
 
 function req(fn){
-       var ret = "{{ url_for('static',filename='res/') }}" + fn
-    console.log("这是："+ret)
-    return 'http://10.99.140.140:14140/static/res/'+fn+'?t='+Math.random()
+    var ret = "{{ url_for('static',filename='res/') }}" + fn
+    // console.log("这是："+ret)
+    return 'http://127.0.0.1:5000/static/res/'+fn+'?t='+Math.random()
+    // return 'http://10.99.140.140:14140/static/res/'+fn+'?t='+Math.random()
 
 }
      
@@ -155,322 +156,351 @@ function colormapa(r,a){
 
 
 
-    function cvxFadeinImg2(cvxid,imgsrc,duration,start_time,x,y,w,h){
-        var cvx = document.getElementById(cvxid)
-        var ctx = cvx.getContext('2d')
+function cvxFadeinImg2(cvxid,imgsrc,duration,start_time,x,y,w,h){
+    var cvx = document.getElementById(cvxid)
+    var ctx = cvx.getContext('2d')
 
-        var img_x=Number(x)
-        var img_y=Number(y)
-        var img_w=Number(w)
-        var img_h=Number(h)
+    var img_x=Number(x)
+    var img_y=Number(y)
+    var img_w=Number(w)
+    var img_h=Number(h)
 
-        var w = Number(cvx.getAttribute('width'))
-        var h = Number(cvx.getAttribute('height'))
+    var w = Number(cvx.getAttribute('width'))
+    var h = Number(cvx.getAttribute('height'))
 
-        console.log([img_x,img_y,img_w,img_h]);
-        console.log(cvx);
+    // console.log([img_x,img_y,img_w,img_h]);
+    // console.log(cvx);
 
-        var img = new Image()
-        img.crossOrigin = "Anonymous"
-        img.src = req(imgsrc)
-        
-        img.onload = function(){
-            var tmpcvx = document.createElement('canvas')
-            tmpcvx.width = w; tmpcvx.height = h;
-            var tmpctx = tmpcvx.getContext('2d')
-            tmpctx.drawImage(img,img_x,img_y,img_w,img_h)
-            var newframe = tmpctx.getImageData(img_x,img_y,img_w,img_h)
-            var oldframe = ctx.getImageData(img_x,img_y,img_w,img_h)
+    var img = new Image()
+    img.crossOrigin = "Anonymous"
+    img.src = req(imgsrc)
 
-            var draw = function(t){
-                ret = function(){ 
-                    var frame = ctx.createImageData(img_w,img_h)                                              
-                    for(var y=0;y<img_h;y++){
-                        for(var x=0;x<img_w;x++){
-                            for(var c=0;c<4;c++)
-                            frame.data[at(img_w,x,y,c)] = t*newframe.data[at(img_w,x,y,c)]
-                                + (1-t)*oldframe.data[at(img_w,x,y,c)]
+    img.onload = function(){
+        var tmpcvx = document.createElement('canvas')
+        tmpcvx.width = w; tmpcvx.height = h;
+        var tmpctx = tmpcvx.getContext('2d')
+        tmpctx.drawImage(img,img_x,img_y,img_w,img_h)
+        var newframe = tmpctx.getImageData(img_x,img_y,img_w,img_h)
+        var oldframe = ctx.getImageData(img_x,img_y,img_w,img_h)
+
+        var draw = function(t){
+            ret = function(){
+                var frame = ctx.createImageData(img_w,img_h)
+                for(var y=0;y<img_h;y++){
+                    for(var x=0;x<img_w;x++){
+                        for(var c=0;c<4;c++)
+                        frame.data[at(img_w,x,y,c)] = t*newframe.data[at(img_w,x,y,c)]
+                            + (1-t)*oldframe.data[at(img_w,x,y,c)]
+                    }
+                }
+                ctx.putImageData(frame,img_x,img_y)
+            }
+            return ret
+        }
+        var nframe = duration/10
+        for (var f=0;f<nframe;f++){
+            setTimeout(draw(f/nframe),f*10+start_time)
+        }
+    }
+}
+function cvxWipeImg2(cvxid,imgsrc,duration,start_time,x,y,w,h){
+    var cvx = document.getElementById(cvxid)
+    var ctx = cvx.getContext('2d')
+
+    var img_x=Number(x)
+    var img_y=Number(y)
+    var img_w=Number(w)
+    var img_h=Number(h)
+
+    var w = Number(cvx.getAttribute('width'))
+    var h = Number(cvx.getAttribute('height'))
+
+    // console.log([img_x,img_y,img_w,img_h])
+    var img = new Image()
+    img.crossOrigin = "Anonymous"
+    img.src = req(imgsrc)
+
+    img.onload = function(){
+        var tmpcvx = document.createElement('canvas')
+        tmpcvx.width = w; tmpcvx.height = h;
+        var tmpctx = tmpcvx.getContext('2d')
+        tmpctx.drawImage(img,img_x,img_y,img_w,img_h)
+        var imgdata = tmpctx.getImageData(img_x,img_y,img_w,img_h).data
+
+        var draw = function(i,tmp_w){
+            ret = function(){
+                var frame = ctx.getImageData(img_x,img_y,img_w,img_h)
+                for(var y=0;y<img_h;y++){
+                    for(var x=0;x<(i>img_w?img_w:i);x++){
+                        for(var c=0;c<4;c++){
+                            frame.data[at(img_w,x,y,c)] = imgdata[at(img_w,x,y,c)]
                         }
                     }
-                    ctx.putImageData(frame,img_x,img_y)
+                    // console.log(x)
                 }
-                return ret
-            }
-            var nframe = duration/10
-            for (var f=0;f<nframe;f++){
-                setTimeout(draw(f/nframe),f*10+start_time)
-            }
-        }            
-    }
-    function cvxWipeImg2(cvxid,imgsrc,duration,start_time,x,y,w,h){
-        var cvx = document.getElementById(cvxid)
-        var ctx = cvx.getContext('2d')
 
-        var img_x=Number(x)
-        var img_y=Number(y)
-        var img_w=Number(w)
-        var img_h=Number(h)
-
-        var w = Number(cvx.getAttribute('width'))
-        var h = Number(cvx.getAttribute('height'))
-        
-        // console.log([img_x,img_y,img_w,img_h])
-        var img = new Image()
-        img.crossOrigin = "Anonymous"
-        img.src = req(imgsrc)          
-        
-        img.onload = function(){
-            var tmpcvx = document.createElement('canvas')
-            tmpcvx.width = w; tmpcvx.height = h;
-            var tmpctx = tmpcvx.getContext('2d')
-            tmpctx.drawImage(img,img_x,img_y,img_w,img_h)
-            var imgdata = tmpctx.getImageData(img_x,img_y,img_w,img_h).data
-            
-            var draw = function(i,tmp_w){
-                ret = function(){
-                    var frame = ctx.getImageData(img_x,img_y,img_w,img_h)
-                    for(var y=0;y<img_h;y++){
-                        for(var x=0;x<(i>img_w?img_w:i);x++){
-                            for(var c=0;c<4;c++){
-                                frame.data[at(img_w,x,y,c)] = imgdata[at(img_w,x,y,c)]
-                            }                                    
-                        }
-                        // console.log(x)
-                    }
-                    
-                    var l = (i-(tmp_w))<0?0:i-(tmp_w)
-                    var r = i>=img_w?(img_w):i
-                    // console.log([l,r])
-                    for(var y=0;y<img_h;y++){
-                        for(var x=l;x<r;x++){
-                            for(var c=0;c<4;c++){
-                                var co = imgdata[at(img_w,x,y,c)]
-                                co = (co-50)%256
-                                frame.data[at(img_w,x,y,c)] = co
-                            }
+                var l = (i-(tmp_w))<0?0:i-(tmp_w)
+                var r = i>=img_w?(img_w):i
+                // console.log([l,r])
+                for(var y=0;y<img_h;y++){
+                    for(var x=l;x<r;x++){
+                        for(var c=0;c<4;c++){
+                            var co = imgdata[at(img_w,x,y,c)]
+                            co = (co-50)%256
+                            frame.data[at(img_w,x,y,c)] = co
                         }
                     }
-                    ctx.putImageData(frame,img_x,img_y)
                 }
-                return ret
+                ctx.putImageData(frame,img_x,img_y)
             }
-            var timePerFrame=100
-            var nframe = duration/timePerFrame
-            var tmp_w=10
-            var dx = (img_w)/nframe
-            for (var f=0;f<nframe;f++){
-                setTimeout(draw(f*dx+dx,tmp_w),f*timePerFrame+start_time)
-            }
+            return ret
+        }
+        var timePerFrame=100
+        var nframe = duration/timePerFrame
+        var tmp_w=10
+        var dx = (img_w)/nframe
+        for (var f=0;f<nframe;f++){
+            setTimeout(draw(f*dx+dx,tmp_w),f*timePerFrame+start_time)
         }
     }
-    function showOriFig(){
-        w=100
-        for (var i=0;i<10;i++){
-                name=vm.img_names[i]
-                this.cvxFadeinImg2('digi-accplot','tmp/ori/'+name+'.png',1800,0*1800,w*i,0,80,80)                         
-        }
-        
-        var cvx = document.getElementById('digi-accplot')
-        var ctx = cvx.getContext('2d')
-        ctx.font="18px Times";
-        ctx.fillStyle = "#FFFFFF";
-        for (var i=0;i<7;i++){
-            label=vm.ground_truth[i];
-            ctx.fillText(label,w*i+5,110)
-        }
-        
-      
+}
+function showOriFig(){
+    w=100
+    for (var i=0;i<10;i++){
+            name=vm.img_names[i]
+            this.cvxFadeinImg2('digi-accplot','tmp/ori/'+name+'.png',1800,0*1800,w*i,0,80,80)
     }
-    function showFeaFig(){
-        
-        var obj=document.getElementById("sourcemodel")
-        console.log("obj为"+obj)
-        vm.sourceModel=obj.options[obj.selectedIndex].value
-        console.log("vm为"+vm.sourceModel)
 
-        w=100
-        for (var i=0;i<7;i++){
-                name=vm.img_names[i]
-                this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
-        }
-
-       
+    var cvx = document.getElementById('digi-accplot')
+    var ctx = cvx.getContext('2d')
+    ctx.font="18px Times";
+    ctx.fillStyle = "#FFFFFF";
+    for (var i=0;i<7;i++){
+        label=vm.ground_truth[i];
+        ctx.fillText(label,w*i+5,110)
     }
-    function optimize(){
-        
-        w=100
-        t=1000
-        flag = true
-        for(var f=1;f<10;f++){
-            for(var i=0;i<7;i++){
-                name=vm.img_names[i]
-                this.cvxWipeImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
-            }
-        if(f == 9) flag = false;    
-        }
-        while(flag){
-            console.log("waiting");
-        };
-                    
+
+
+}
+function showFeaFig(){
+
+    var obj=document.getElementById("sourcemodel")
+    // console.log("obj为"+obj)
+    vm.sourceModel=obj.options[obj.selectedIndex].value
+    // console.log("vm为"+vm.sourceModel)
+
+    w=100
+    for (var i=0;i<7;i++){
+            name=vm.img_names[i]
+            this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
     }
-    function showAdvFig(){
-        w=100
-        for (var i=0;i<7;i++){
-                name=vm.img_names[i]
-                this.cvxFadeinImg2('digi-slice','tmp/'+vm.sourceModel+'/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
-        }
 
-        var cvx = document.getElementById('digi-slice')
-        var ctx = cvx.getContext('2d')
-        ctx.fillStyle = "#FFFFFF";
-        ctx.font="18px Times";
-        for (var i=0;i<7;i++){
-            img=vm.imgs[i]
-            // ctx.fillStyle = '#ffffff';
-            ctx.fillText(img, 16+w*i,165)
-        }
 
-        
+}
+function optimize(){
+
+    w=100
+    t=1000
+    flag = true
+    for(var f=1;f<10;f++){
+        for(var i=0;i<7;i++){
+            name=vm.img_names[i]
+            this.cvxWipeImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
+        }
+    if(f == 9) flag = false;
     }
-    function showPreResult(){
-        var opt = $("#sourcemodel option:selected").val();
-        console.log(opt+"haha");
-        var tempdata = Label[opt];
-        
-        var tempH = value[opt];
-        var heatmapData = [];
-        var data = []
-        for(i = 0;i<7;i++)
-            for(j = 0;j<7;j++){
-                heatmapData.push([i,j,tempdata[i][j]]);
-                console.log(i+"和"+j+"he"+tempdata[i][j]);
-                data.push([i,j,tempH[i][j]]);
-            }
+    while(flag){
+        console.log("waiting");
+    };
 
-        // 
-        var HeapDom = document.getElementById('heap');
-        var heapChart = echarts.init(HeapDom);
-        option = {
-        tooltip: {
-            position: 'top'
+}
+function showAdvFig(){
+    w=100
+    for (var i=0;i<7;i++){
+            name=vm.img_names[i]
+            this.cvxFadeinImg2('digi-slice','tmp/'+vm.sourceModel+'/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
+    }
+
+    var cvx = document.getElementById('digi-slice')
+    var ctx = cvx.getContext('2d')
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font="18px Times";
+    for (var i=0;i<7;i++){
+        img=vm.imgs[i]
+        // ctx.fillStyle = '#ffffff';
+        ctx.fillText(img, 16+w*i,165)
+    }
+
+
+}
+function showPreResult(){
+    var opt = $("#sourcemodel option:selected").val();
+    console.log(opt+"haha");
+    var tempdata = Label[opt];
+
+    var tempH = value[opt];
+    var heatmapData = [];
+    var data = []
+    for(i = 0;i<7;i++)
+        for(j = 0;j<7;j++){
+            heatmapData.push([i,j,tempdata[i][j]]);
+            console.log(i+"和"+j+"he"+tempdata[i][j]);
+            data.push([i,j,tempH[i][j]]);
+        }
+
+    //
+    var HeapDom = document.getElementById('heap');
+    var heapChart = echarts.init(HeapDom);
+    option = {
+    tooltip: {
+        position: 'top'
+    },
+    grid: {
+        height: '50%',
+        top: '10%'
+    },
+    xAxis: {
+        name:"目标模型",
+        nameLocation:'middle',
+        nameTextStyle:{
+            fontSize: 20,
+            color: "rgba(4, 249, 208, 1)",
+            fontWeight: "bolder",
+            textBorderColor: "rgba(139, 238, 103, 0.98)",
+            textBorderWidth: 0.5,
+            textBorderType: "solid",
         },
-        grid: {
-            height: '50%',
-            top: '10%'
-        },
-        xAxis: {
-            name:"目标模型",
-            nameLocation:'middle',
-            nameTextStyle:{
-                fontSize: 20,
-                color: "rgba(4, 249, 208, 1)",
-                fontWeight: "bolder",
-                textBorderColor: "rgba(139, 238, 103, 0.98)",
-                textBorderWidth: 0.5,
-                textBorderType: "solid",                
-            },
-            nameGap:30,
-            type: 'category',
-            data: advCol,
-            axisLabel: {
-                rotate:8,
-                fontSize: 10,
-                color: "rgba(4, 249, 208, 1)",
-                fontWeight: "bolder",
-                textBorderColor: "rgba(139, 238, 103, 0.98)",
-                textBorderWidth: 0.5,
-                textBorderType: "solid",
-                
-            },
-            position:'top',
-            splitArea: {
-            show: true
-            }
-        },
-        yAxis: {
-            type: 'category',
-            data: advRow,
-            axisLabel: {
-                fontSize: 10,
-                color: "rgba(4, 249, 208, 1)",
-                fontWeight: "bolder",
-                textBorderColor: "rgba(139, 238, 103, 0.98)",
-                textBorderWidth: 0.5,
-                textBorderType: "solid",
-                
-            },
-            splitArea: {
-            show: true
-            }
-        },
-        visualMap: {
-            show:false,
-            min: 0,
-            max: 1,
-            seriesIndex:[1],
-            orient: 'horizontal',
-            color:['#3CB371','#B22222'],
-            left: 'center',
-            bottom: '15%'
-        },
-        series: [
-            {
-            name: 'wat',
-            type: 'scatter',
-            symbolSize:0.01,
-            animationDuration: 3000,
-            data: heatmapData,
-            label: {
-                show: true,
-                formatter: function (param) {
-                return param.value[2];
-                },
-                fontSize:13,
-                fontStyle:{
-                
-                }
-            },
-            emphasis: {
-                itemStyle: {
-                shadowBlur: 10,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-            },
-            {
-            
-            type: 'heatmap',
-            data: data,
-            animationDuration: 3000,
-            itemStyle:{
-                borderWidth:2,
-                borderColor:'#fff',
-                opacity:1.0,
-            },
-            label: {
-                show: false,
-                formatter: function (params) {
-                return params.value[2] + '\n\n';
-                },
-            },
-            emphasis: {
-                itemStyle: {
-                shadowBlur: 10,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-            }
-        ]
-        };
-        heapChart.setOption(option);
+        nameGap:30,
+        type: 'category',
+        data: advCol,
+        axisLabel: {
+            rotate:8,
+            fontSize: 10,
+            color: "rgba(4, 249, 208, 1)",
+            fontWeight: "bolder",
+            textBorderColor: "rgba(139, 238, 103, 0.98)",
+            textBorderWidth: 0.5,
+            textBorderType: "solid",
 
-    }
+        },
+        position:'top',
+        splitArea: {
+        show: true
+        }
+    },
+    yAxis: {
+        type: 'category',
+        data: advRow,
+        axisLabel: {
+            fontSize: 10,
+            color: "rgba(4, 249, 208, 1)",
+            fontWeight: "bolder",
+            textBorderColor: "rgba(139, 238, 103, 0.98)",
+            textBorderWidth: 0.5,
+            textBorderType: "solid",
+
+        },
+        splitArea: {
+        show: true
+        }
+    },
+    visualMap: {
+        show:false,
+        min: 0,
+        max: 1,
+        seriesIndex:[1],
+        orient: 'horizontal',
+        color:['#3CB371','#B22222'],
+        left: 'center',
+        bottom: '15%'
+    },
+    series: [
+        {
+        name: 'wat',
+        type: 'scatter',
+        symbolSize:0.01,
+        animationDuration: 3000,
+        data: heatmapData,
+        label: {
+            show: true,
+            formatter: function (param) {
+            return param.value[2];
+            },
+            fontSize:13,
+            fontStyle:{
+
+            }
+        },
+        emphasis: {
+            itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+        },
+        {
+
+        type: 'heatmap',
+        data: data,
+        animationDuration: 3000,
+        itemStyle:{
+            borderWidth:2,
+            borderColor:'#fff',
+            opacity:1.0,
+        },
+        label: {
+            show: false,
+            formatter: function (params) {
+            return params.value[2] + '\n\n';
+            },
+        },
+        emphasis: {
+            itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+        }
+    ]
+    };
+    heapChart.setOption(option);
+
+}
 
 function opt() {
+    var modal = $('#sourcemodel option:selected').val();
+    var layer = $('#second option:selected').text();
+    var move = document.getElementById('max_move').value;
+    var times = document.getElementById('move_times').value;
+    var steps = document.getElementById('step_times').value;
 
+    console.log("参数确认：");
+    console.log(modal, layer, move, times, steps);
+
+    data = {
+        modal: modal,
+        layer: layer,
+        max_mv: move,
+        mv_times: times,
+        stp_times: steps
+    };
+    $.ajax({
+        type: "POST",
+        cache: false,
+        data: data,
+        url: "/",
+        datatype: "json",
+        success: function (res) {
+            console.log(res);
+
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR);
+        }
+    })
     showFeaFig();
     optimize();
-    setTimeout("showAdvFig()", 5000)
+    setTimeout("showAdvFig()", 5000);
 }
 
 function nextChange() {
