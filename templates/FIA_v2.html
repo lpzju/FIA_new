@@ -239,8 +239,51 @@
                     <img src="../static/images/main_top_bottom.png"
                      style="position: absolute;height: 100%; width: 98%;pointer-events: none; margin: 1%">
                     <div class="main_top_echarts_con_title" style="margin-left: 3%; margin-top: 1.7%">黑盒测试</div>
-                    黑盒测试在这里
-                </div>
+                    <div style="width: 30%;height: 90%; position: relative; float: left; margin-left: 2%;">
+                        <img src="../static/images/main_top_bottom.png"
+                        style="position: absolute;height: 100%; width: 100%;">
+                    <div class="main_top_echarts_con_title">输入选项</div>
+                    <div class="checkbox1" style="margin-left: 5%;">
+                        <h5 class="h5_class">请选择模型</h5>
+                        <!-- 复选 -->
+                        <input type="checkbox" name="method" value="inception_v3" id="selectmethod1"><label for="selectmethod1">InceptionV3</label>
+                        <br>
+                        <input type="checkbox" name="method" value="inception_v4" id="selectmethod2"><label for="selectmethod2">InceptionV4</label>
+                        <br>
+                        <input type="checkbox" name="method" value="inception_resnet_v2" id="selectmethod3"><label for="selectmethod3">ResnetV2</label>
+                        <br>
+                        <input type="checkbox" name="method" value="resnet_v1_50" id="selectmethod4"><label for="selectmethod4">Resnet50</label>
+                        <br>
+                        <input type="checkbox" name="method" value="resnet_v1_152" id="selectmethod5"><label for="selectmethod5">Resnet152</label>
+                        <br>
+                        <input type="checkbox" name="method" value="vgg_16" id="selectmethod6"><label for="selectmethod6">VGG16</label>
+                        <br>
+                        <input type="checkbox" name="method" value="vgg_19" id="selectmethod7"><label for="selectmethod7">VGG19</label>
+                        <br>
+                    </div>
+                    <div class="btndiv" style="margin-top: 4%;">
+                        <button class="filebtn filebtn1" onclick="showPreResult()">启动</button>
+                    </div>
+                    </div>
+                    
+                    <div style="width: 66.5%;height: 90%; position: relative; float: left;">
+                       
+                        <img src="../static/images/main_top_bottom.png"
+                            style="position: absolute;height: 100%; width: 100%;">
+                        <div class="main_top_echarts_con_title">输出</div>
+                        <div id="backboxloading" class="loading" style="display: none;" >
+
+                            <span></span>
+
+                            <span></span>
+                    
+                            <span></span>
+                    
+                            <span></span>
+                    
+                            <span></span>
+                        </div>
+                        <div id="heatmap" style="width: 100%;height: 100%; float: left;">
             </div>
         </div>
     </div>
@@ -259,4 +302,5 @@
 <script type="text/javascript" src="{{ url_for('static',filename='js/app.js') }}"></script>
 <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script src="{{ url_for('static',filename='js/mainFunc_copy.js') }}"></script>
+<!-- <script src="{{ url_for('static',filename='js/mainFunc_copy.js') }}"></script> -->
+<script type="text/javascript">document.write("<script type='text/javascript' src='../static/js/mainFunc_copy.js?v=" + new Date().getTime() + "'><\/script>");</script>
