@@ -80,6 +80,10 @@ const value={
 
 }
 
+var attackflag = true;//上一次结果是否生成
+var Btid;
+var backEof = false;
+var modelvalue;
 //热力图 
 
 // 
@@ -124,7 +128,7 @@ function at(w,x,y,c){
 function req(fn){
     var ret = "{{ url_for('static',filename='res/') }}" + fn
     // console.log("这是："+ret)
-    return 'http://127.0.0.1:5000/static/res/'+fn+'?t='+Math.random()
+    return '/static/res/'+fn+'?t='+Math.random()
     // return 'http://10.99.140.140:14140/static/res/'+fn+'?t='+Math.random()
 
 }
@@ -539,5 +543,216 @@ function nextChange() {
         second.options.add(new Option("block1/unit_3", "4"));
     }
 }
+function heatmappshow(BackboxResult, model_names){
+    
+    var opt = $("#sourcemodel option:selected").val();//上一次的结果
+    // var opt = $("#box_select checked").val();
+    console.log("opt")
+    console.log(opt);
+    var tempdata = Label[opt];
+    console.log("tempdata")
+    console.log(tempdata);
+    var tempH = value[opt];
+    var heatmapData = [];
+    var data = []
+    for(i = 0;i<7;i++)
+        for(j = 0;j<7;j++){
+            heatmapData.push([i,j,tempdata[i][j]]);
+            console.log(i+"和"+j+"和"+tempdata[i][j]);
+            data.push([i,j,tempH[i][j]]);
+        }
 
+    // 
+    var HeapDom = document.getElementById('heap');
+    var heapChart = echarts.init(HeapDom);
+    option = {
+    tooltip: {
+        position: 'top'
+    },
+    grid: {
+        height: '60%',
+        top: '20%',
+        left:"15%"
+    },
+    xAxis: {
+        name:"目标模型",
+        nameLocation:'middle',
+        nameTextStyle:{
+            fontSize: 20,
+            color: "white",
+            fontWeight: "bolder",
+            textBorderColor: "white",
+            textBorderWidth: 0.5,
+            textBorderType: "solid",                
+        },
+        nameGap:30,
+        type: 'category',
+        data: advCol,
+        axisLabel: {
+            rotate:8,
+            fontSize: 14,
+            color: "white",
+            fontWeight: "bolder",
+            textBorderColor: "rgba(139, 238, 103, 0.98)",
+            textBorderWidth: 0.2,
+            textBorderType: "solid",
+            
+        },
+        position:'top',
+        splitArea: {
+        show: true
+        }
+    },
+    yAxis: {
+        type: 'category',
+        data: advRow,
+        axisLabel: {
+            fontSize: 14,
+            color: "white",
+            fontWeight: "bolder",
+            textBorderColor: "white",
+            textBorderWidth: 0.2,
+            textBorderType: "solid",
+            
+        },
+        splitArea: {
+        show: true
+        }
+    },
+    visualMap: {
+        show:false,
+        min: 0,
+        max: 1,
+        seriesIndex:[1],
+        orient: 'horizontal',
+        color:['#3CB371','#B22222'],
+        left: 'center',
+        bottom: '15%'
+    },
+    series: [
+        {
+        name: 'wat',
+        type: 'scatter',
+        symbolSize:0.01,
+        animationDuration: 3000,
+        data: heatmapData,
+        label: {
+            show: true,
+            formatter: function (param) {
+            return param.value[2];
+            },
+            fontSize:13,
+            fontStyle:{
+            
+            }
+        },
+        emphasis: {
+            itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+        },
+        {
+        
+        type: 'heatmap',
+        data: data,
+        animationDuration: 3000,
+        itemStyle:{
+            borderWidth:2,
+            borderColor:'#fff',
+            opacity:1.0,
+        },
+        label: {
+            show: false,
+            formatter: function (params) {
+            return params.value[2] + '\n\n';
+            },
+        },
+        emphasis: {
+            itemStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+        }
+    ]
+    };
+    heapChart.setOption(option);
+}
+
+function backboxresult(){
+    
+    var timer1=setInterval(()=>{
+        data2={
+            tid:Btid
+        }
+        console.log("Btid:",Btid);
+        $.ajax({
+            type: "POST",
+            cache: false,
+            data: data2,
+            url: "/get_attack",
+            dataType: "json",
+
+            success: function (res) {
+                //判断结束标志
+                backEof = res.Eof;
+                BackboxResult = res.BackboxResult;
+                console.log('展示对抗攻击结果');
+                console.log(res);
+            }
+        });
+        if(backEof == true){
+            clearInterval(timer1);
+            timer1=null;
+            $("#backboxloading").hide();
+            $('#heatmap').show();
+            heatmappshow(BackboxResult,modelvalue);
+            $('.filebtn1').removeAttr("disabled").css({"background-color":"transparent", "cursor": "default"});
+        };
+    },2000000);
+}
+function showPreResult(){
+    var modellist = document.getElementsByName("method");//输入模型
+    var modelvalue = [];
+    for (var i=0;i<modellist.length;i++){
+        if (modellist[i].checked) modelvalue.push(modellist[i].value);
+    }
+    console.log("参数确认：")
+    console.log(modelvalue);
+    if(modelvalue.length == 0 ){
+        alert("请确认输入选项不为空！"); return;
+    }
+    if(attackflag == false ){
+        alert("请确认最新对抗样本是否生成！"); return;
+    }
+    else {
+        // 防止重复提交
+        $('.filebtn1').attr("disabled", true).css({"background-color": "grey", "cursor": "no-drop"});
+        event.stopPropagation();
+    }
+    data={
+        model_names:JSON.stringify(modelvalue)
+    };
+    console.log(data);
+    $("#backboxloading").show();
+    $("#heatmap").hide();
+    $.ajax({
+        type: "POST",
+        cache: false,
+        data: data,
+        url: "/post_backbox",
+        dataType: "json",
+        success: function (res) {
+            console.log('----res----');
+            console.log(res);
+            Btid = res.tid
+        },
+        error: function (jqXHR) {
+            console.error(jqXHR);
+        }
+    });
+    backboxresult();
+}
 
