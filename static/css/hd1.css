@@ -668,7 +668,18 @@
         .btndiv{
             width: 30%;
             height: fit-content;
-            margin-top: 30%;
+            margin-top: 5%;
+            margin-left: 35%;
+            font-size: large;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+        }
+        .btndiv1{
+            width: 72px;
+            height: 35px;
+            margin-top: 5%;
             margin-left: 35%;
             font-size: large;
             display: flex;
