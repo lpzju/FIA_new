@@ -162,10 +162,10 @@
                             <select name="" id="sourcemodel" onchange="nextChange()" class="form-control" style="width: 60%;color: black;">
                                 <option value=""  >请选择替代模型</option>
                                 disabled selected hidden
-                                <option value="VGG16">VGG16</option>
-                                <option value="InceptionV3">InceptionV3</option>
-                                <option value="InceptionResNetV2">InceptionResNetV2</option>
-                                <option value="ResNet152">ResNet152</option>
+                                <option value="vgg_16">VGG16</option>
+                                <option value="inception_v3">InceptionV3</option>
+                                <option value="inception_resnet_V2">InceptionResNetV2</option>
+                                <option value="resnet152">ResNet152</option>
                             </select>
                         </div>
                         <div class="model_input">
@@ -226,8 +226,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:5% 5% 0;float: left">对抗图像
-                            </div>
+                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:5% 5% 0;float: left">对抗图像</div>
                             <div style="width: 80%;height: 100%;float: right;">
                                 <canvas id='digi-slice' width=600 height=100
                                         style="margin-top: 0%;margin-right: 10%;float:right"></canvas>
@@ -242,52 +241,53 @@
                     <div style="width: 30%;height: 90%; position: relative; float: left; margin-left: 2%;">
                         <img src="../static/images/main_top_bottom.png"
                         style="position: absolute;height: 100%; width: 100%;">
-                    <div class="main_top_echarts_con_title">输入选项</div>
-                    <div class="checkbox1" style="margin-left: 5%;">
-                        <h5 class="h5_class">请选择模型</h5>
-                        <!-- 复选 -->
-                        <input type="checkbox" name="method" value="inception_v3" id="selectmethod1"><label for="selectmethod1">InceptionV3</label>
-                        <br>
-                        <input type="checkbox" name="method" value="inception_v4" id="selectmethod2"><label for="selectmethod2">InceptionV4</label>
-                        <br>
-                        <input type="checkbox" name="method" value="inception_resnet_v2" id="selectmethod3"><label for="selectmethod3">ResnetV2</label>
-                        <br>
-                        <input type="checkbox" name="method" value="resnet_v1_50" id="selectmethod4"><label for="selectmethod4">Resnet50</label>
-                        <br>
-                        <input type="checkbox" name="method" value="resnet_v1_152" id="selectmethod5"><label for="selectmethod5">Resnet152</label>
-                        <br>
-                        <input type="checkbox" name="method" value="vgg_16" id="selectmethod6"><label for="selectmethod6">VGG16</label>
-                        <br>
-                        <input type="checkbox" name="method" value="vgg_19" id="selectmethod7"><label for="selectmethod7">VGG19</label>
-                        <br>
-                    </div>
-                    <div class="btndiv" style="margin-top: 3%;">
-                        <button class="filebtn filebtn1" onclick="showPreResult()">启动</button>
-                    </div>
-                    </div>
-                    
-                    <div style="width: 66.5%;height: 90%; position: relative; float: left;">
-                       
-                        <img src="../static/images/main_top_bottom.png"
-                            style="position: absolute;height: 100%; width: 100%;">
-                        <div class="main_top_echarts_con_title">输出</div>
-                        <div id="backboxloading" class="loading" style="display: none;" >
-
-                            <span></span>
-
-                            <span></span>
-                    
-                            <span></span>
-                    
-                            <span></span>
-                    
-                            <span></span>
+                        <div class="main_top_echarts_con_title">输入选项</div>
+                        <div class="checkbox1" style="margin-left: 5%;">
+                            <h5 class="h5_class">请选择模型</h5>
+                            <!-- 复选 -->
+                            <input type="checkbox" name="method" value="inception_v3" id="selectmethod1"><label for="selectmethod1">InceptionV3</label>
+                            <br>
+                            <input type="checkbox" name="method" value="inception_v4" id="selectmethod2"><label for="selectmethod2">InceptionV4</label>
+                            <br>
+                            <input type="checkbox" name="method" value="inception_resnet_v2" id="selectmethod3"><label for="selectmethod3">ResnetV2</label>
+                            <br>
+                            <input type="checkbox" name="method" value="resnet_v1_50" id="selectmethod4"><label for="selectmethod4">Resnet50</label>
+                            <br>
+                            <input type="checkbox" name="method" value="resnet_v1_152" id="selectmethod5"><label for="selectmethod5">Resnet152</label>
+                            <br>
+                            <input type="checkbox" name="method" value="vgg_16" id="selectmethod6"><label for="selectmethod6">VGG16</label>
+                            <br>
+                            <input type="checkbox" name="method" value="vgg_19" id="selectmethod7"><label for="selectmethod7">VGG19</label>
+                            <br>
                         </div>
-                        <div id="heatmap" style="width: 100%;height: 100%; float: left;">
+                        <div class="btndiv" style="margin-top: 3%;">
+                            <button class="filebtn filebtn1" onclick="showPreResult()">启动</button>
+                        </div>
+
+                        <div style="width: 66.5%;height: 90%; position: relative; float: left;">
+
+                            <img src="../static/images/main_top_bottom.png"
+                                style="position: absolute;height: 100%; width: 100%;">
+                            <div class="main_top_echarts_con_title">输出</div>
+                            <div id="backboxloading" class="loading" style="display: none;" >
+
+                                <span></span>
+
+                                <span></span>
+
+                                <span></span>
+
+                                <span></span>
+
+                                <span></span>
+                            </div>
+                            <div id="heatmap" style="width: 100%;height: 100%; float: left;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 
