@@ -68,10 +68,6 @@ def upload_file():
         # file_url = url_for('uploaded_file', filename=filename)
         # return html + '<br><img src=' + file_url + '>'
 
-@app.route('/get_attack', methods=['GET'])
-def get_attack():
-    pass
-
 # 任务消耗池
 def Taskrun():
     global Backboxlist
@@ -201,5 +197,5 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='24140', debug=True)
+    app.run(host='0.0.0.0', port='8880', debug=True)
     # app.run(debug=True)

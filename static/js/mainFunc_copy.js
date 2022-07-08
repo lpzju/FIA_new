@@ -296,6 +296,7 @@ function showFeaFig(){
     w=100
     for (var i=0;i<7;i++){
             name=vm.img_names[i]
+            // console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_0.png')
             this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
     }
 
@@ -309,6 +310,7 @@ function optimize(){
     for(var f=1;f<10;f++){
         for(var i=0;i<7;i++){
             name=vm.img_names[i]
+            console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png')
             this.cvxWipeImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
         }
     if(f == 9) flag = false;
@@ -512,27 +514,27 @@ function nextChange() {
     var second = document.getElementById("second");
     second.options.length = 0; // 清除second下拉框的所有内容
     if (first.selectedIndex == 1) {
-        second.options.add(new Option("Conv1_2", "0", false, true));  // 默认选中区
-        second.options.add(new Option("Conv2_2", "4"));
-        second.options.add(new Option("Conv3_3", "2"));
-        second.options.add(new Option("Conv4_3", "2"));
-        second.options.add(new Option("Conv5_3", "1"));
+        second.options.add(new Option("conv1_2", "0", false, true));  // 默认选中区
+        second.options.add(new Option("conv2_2", "4"));
+        second.options.add(new Option("conv3_3", "2"));
+        second.options.add(new Option("conv4_3", "2"));
+        second.options.add(new Option("conv5_3", "1"));
     }
 
     if (first.selectedIndex == 2) {
-        second.options.add(new Option("Conv2d_2b", "0", false, true));  // 默认选中区
-        second.options.add(new Option("Conv2d_4a", "1"));
-        second.options.add(new Option("Mixed_5b", "2"));
-        second.options.add(new Option("Mixed_6a", "3"));
-        second.options.add(new Option("Mixed_7a", "4"));
+        second.options.add(new Option("conv2d_2b", "0", false, true));  // 默认选中区
+        second.options.add(new Option("conv2d_4a", "1"));
+        second.options.add(new Option("mixed_5b", "2"));
+        second.options.add(new Option("mixed_6a", "3"));
+        second.options.add(new Option("mixed_7a", "4"));
     }
 
     if (first.selectedIndex == 3) {
-        second.options.add(new Option("Conv2d_2b", "0", false, true));  // 默认选中区
-        second.options.add(new Option("Conv2d_4a", "1"));
-        second.options.add(new Option("Mixed_5b", "2"));
-        second.options.add(new Option("Mixed_6a", "3"));
-        second.options.add(new Option("Mixed_7a", "4"));
+        second.options.add(new Option("conv2d_2b", "0", false, true));  // 默认选中区
+        second.options.add(new Option("conv2d_4a", "1"));
+        second.options.add(new Option("mixed_5b", "2"));
+        second.options.add(new Option("mixed_6a", "3"));
+        second.options.add(new Option("mixed_7a", "4"));
     }
 
     if (first.selectedIndex == 4) {
