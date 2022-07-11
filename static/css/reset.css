@@ -144,6 +144,7 @@ html,
     position       : relative;
     background     : url(../images/background.jpg) no-repeat;
     background-size: cover;
+    margin-top:2%;
 }
 
 .nav {
