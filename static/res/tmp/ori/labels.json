@@ -1,0 +1,62 @@
+{
+  "img_1": {
+    "label_name": "giant panda"
+  },
+  "img_2": {
+    "label_name": "gondola"
+  },
+  "img_3": {
+    "label_name": "lycaenid"
+  },
+  "img_4": {
+    "label_name": "American coot"
+  },
+  "img_5": {
+    "label_name": "lorikeet"
+  },
+  "img_6": {
+    "label_name": "ballplayer"
+  },
+  "img_7": {
+    "label_name": "ostrich"
+  },
+  "img_8": {
+    "label_name": "cannon"
+  },
+  "img_9": {
+    "label_name": "long-horned beetle"
+  },
+  "img_10": {
+    "label_name": "espresso"
+  },
+  "img_11": {
+    "label_name": "matchstick"
+  },
+  "img_12": {
+    "label_name": "matchstick"
+  },
+  "img_13": {
+    "label_name": "matchstick"
+  },
+  "img_14": {
+    "label_name": "matchstick"
+  },
+  "img_15": {
+    "label_name": "matchstick"
+  },
+  "img_16": {
+    "label_name": "matchstick"
+  },
+  "img_17": {
+    "label_name": "matchstick"
+  },
+  "img_18": {
+    "label_name": "matchstick"
+  },
+  "img_19": {
+    "label_name": "matchstick"
+  },
+  "img_20": {
+    "label_name": "matchstick"
+  }
+}

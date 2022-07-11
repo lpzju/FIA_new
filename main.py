@@ -4,7 +4,7 @@ import os
 from flask import Flask, request, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 from datetime import timedelta
-import verify
+import verify, attack
 import datetime, pytz
 import threading, hashlib, time, json
 
@@ -16,6 +16,7 @@ salt = str(format_time)
 Backboxdict = {}
 Backboxlist = []
 whileflag = 0
+Eofdata = False
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.getcwd()
@@ -48,6 +49,61 @@ def uploaded_file(filename):
 
 
 @app.route('/', methods=['GET', 'POST'])
+def showimages():
+    global Eofdata
+    if request.method == "GET":
+        return render_template("FIA_v2.html")
+    else:
+        paras = {
+            "model_name": request.form.get("modal"),
+            "layer_name": request.form.get("layer"),
+            "max_epsilon": request.form.get("max_mv"),
+            "num_iter": request.form.get("mv_times"),
+            "alpha": request.form.get("stp_times"),
+            "tid":request.form.get('task_id')
+        }
+        print('#' * 10 + "param" + '#' * 10)
+        print(paras)
+        # if Eofdata == False:
+        # print('----ready to t1 -----')
+        run_attack(paras)
+        # t1 = threading.Thread(target=run_attack, args=(paras,))
+        # print('---- thread----------')
+        # t1.setDaemon(True)
+        # t1.start()
+        Eofdata = True
+        print('Eofdata='+Eofdata)
+        return json.dumps({"states": "success", "tid": paras["tid"] })
+
+        # Eofdata = True
+        # run_attack(paras)
+        # if Eofdata == True:
+        #     print('eof==true')
+        #     return json.dumps({"states": "success", "Eof":Eofdata})
+
+def run_attack(paras):
+    global Eofdata
+    Eofdata = False
+    attack.FLAGS.model_name = paras["model_name"]
+    attack.FLAGS.layer_name = paras["model_name"] + "/" + paras["layer_name"][:-2] + "/" + paras[
+        "layer_name"] + "/" + "Relu"
+    print(attack.FLAGS.layer_name)
+    attack.FLAGS.input_dir = "./static/res/tmp/ori/"
+    attack.FLAGS.output_dir = "./static/res/tmp/adv/"
+    attack.FLAGS.max_epsilon = float(paras["max_epsilon"])
+    attack.FLAGS.num_iter = int(paras["num_iter"])
+    # print(attack.FLAGS)
+    attack.FLAGS.alpha = float(paras["alpha"])
+    try:
+        print('attack开始执行main')
+        attack.main()
+        print('attack.main执行结束')
+    except:
+        print("执行失败")
+    # finally:
+    #     Eofdata = True
+        # time.sleep(40)
+
 def upload_file():
     if request.method == "GET":
         return render_template("FIA_v2.html")
@@ -197,5 +253,5 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='24109', debug=True)
+    app.run(host='0.0.0.0', port='8880', debug=True)
     # app.run(debug=True)

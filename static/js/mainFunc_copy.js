@@ -475,6 +475,8 @@ function showPreResult(){
 }
 
 function opt() {
+    var eof = false
+    // var timer1 = setInterval(()=> {
     var modal = $('#sourcemodel option:selected').val();
     var layer = $('#second option:selected').text();
     var move = document.getElementById('max_move').value;
@@ -483,21 +485,30 @@ function opt() {
 
     console.log("参数确认：");
     console.log(modal, layer, move, times, steps);
+    // if(modal & layer & move & times & steps ){
+    //     return;
+    // }
+    // else {
+    //     alert("请确认输入选项不为空！"); return;
+    // }
+    tid = new Date().getTime();
 
     data = {
         modal: modal,
         layer: layer,
         max_mv: move,
         mv_times: times,
-        stp_times: steps
+        stp_times: steps,
+        task_id: tid
     };
     $.ajax({
         type: "POST",
-        cache: false,
+        // cache: false,
         data: data,
         url: "/",
         datatype: "json",
         success: function (res) {
+            tid = res.tid;
             console.log(res);
 
         },
@@ -507,7 +518,7 @@ function opt() {
     })
     showFeaFig();
     optimize();
-    setTimeout("showAdvFig()", 5000);
+    showAdvFig()
 }
 
 function nextChange() {
@@ -771,5 +782,5 @@ function showPreResult(){
         }
     });
     backboxresult();
-}
+};
 
