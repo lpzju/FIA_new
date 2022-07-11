@@ -75,7 +75,7 @@ def Taskrun():
     global whileflag
     
     while(len(Backboxlist)>0):
-        print("******************************while开始******************************") 
+        print("******************************while begin******************************") 
         Nowtid=""
         print("7:",Nowtid,Backboxlist)
         # 大于0则有任务，等于0无任务，sleep20秒
@@ -92,7 +92,7 @@ def Taskrun():
             # 当前tid运行中
             elif Backboxdict[Nowtid]["flag"]==1:
                 print("2:",Nowtid,Backboxlist)
-                time.sleep(20)
+                time.sleep(60)
             # 当前任务完成
             elif Backboxdict[Nowtid]["flag"]==2:
                 print("3:",Nowtid,Backboxlist)
@@ -124,7 +124,7 @@ def Taskrun():
 # 黑盒任务执行
 def backboxrun(Backboxdict, tid):
     Backboxdict[tid]["flag"]=1
-    print("###################################线程中#################################")
+    print("###################################processing#################################")
     print("6:",tid,Backboxdict)
     model_names = Backboxdict[tid]["param"]["model_names"]
     ori_path = Backboxdict[tid]["param"]["ori_path"]
@@ -134,7 +134,7 @@ def backboxrun(Backboxdict, tid):
     verify.test2(ori_path, adv_path, output_file, model_names)
     Backboxdict[tid]["Eof"] = True
     Backboxdict[tid]["flag"]=2
-    print("------------------"+tid+"黑盒测试结束------------------")
+    print("------------------"+tid+"backbox end------------------")
 
 # 黑盒任务调用
 @app.route('/post_backbox', methods=['POST'])
@@ -158,7 +158,7 @@ def post_backbox():
     param = {"model_names": model_names,
     "ori_path":"./data/ori/",
     "adv_path":"./data/adv/",
-    "output_file":"./data/%s_log.json" % tid,
+    "output_file":"./data/%s.json" % tid,
     "tid":tid
     }
     print("###########################param#############################\n")
@@ -170,21 +170,21 @@ def post_backbox():
     Backboxdict[tid]["Eof"]=False
     Backboxlist.append(tid)
     # 如果任务执行进程未启动，则开启
-    backboxrun(Backboxdict,tid)
-    # if whileflag == 0:
-    #     t3 = threading.Thread(target=Taskrun,args=())
-    #     t3.setDaemon(True)
-    #     t3.start()
-    #     whileflag = 1
+    # backboxrun(Backboxdict,tid)
+    if whileflag == 0:
+        t3 = threading.Thread(target=Taskrun,args=())
+        t3.setDaemon(True)
+        t3.start()
+        whileflag = 1
     # 返回tid
     return json.dumps({"status":"success","tid":tid})
 
 
 # 获取黑盒测试数据
-@app.route('/get_attack', methods=['POST'])
+@app.route('/get_backboxdata', methods=['POST'])
 def get_backbox():
     tid = request.form.get("tid")
-    path = "./data/"+tid+"_log.json"
+    path = "./data/"+tid+".json"
     if os.path.exists(path):
         with open(path, "r") as fp:
             data = json.load(fp)
@@ -197,5 +197,5 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8880', debug=True)
+    app.run(host='0.0.0.0', port='24109', debug=True)
     # app.run(debug=True)

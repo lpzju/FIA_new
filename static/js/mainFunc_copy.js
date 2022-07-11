@@ -1,5 +1,5 @@
 const Label={
-    'VGG16':[  //替代模型为vgg16
+    'vgg_16':[  //替代模型为vgg16
         ['three-toed\nsloth','ringlet','poncho','Christmas\nstocking','jigsaw\npuzzle','velvet','carousel'], //#目标模型为inceptionv3,对于7张图像的预测结果
         ['three-toed\nsloth','ringlet','jigsaw\npuzzle','green\nmamba','mosquito\nnet','quilt','brassiere'], //#目标模型为inceptionv4
         ['three-toed\nsloth','lycaenid','jigsaw\npuzzle','green\nmamba','window\nscreen','head\ncabbage','wardrobe'],//#目标模型为inceptionresnetv2
@@ -8,7 +8,7 @@ const Label={
         ['starfish','thimble','tool kit','Christmas\nstocking','quilt','quilt','carousel'],//#目标模型为vgg16
         ['chiton','sea\nurchin','jigsaw\npuzzle','Christmas\nstocking','mosquito\nnet','pillow','theater\ncurtain'],//#目标模型为vgg19
     ],
-    'InceptionV3':[ //#替代模型为inceptionv3
+    'inception_v3':[ //#替代模型为inceptionv3
         ['mask','anemone','umbrella','mask','mosque','teapot','brassiere'],
         ['baboon','sea\nurchin','skunk','spindle','mosque','teapot','brassiere'],
         ['baboon','sea\nurchin','zebra','terrapin','castle','teapot','wardrobe'],
@@ -17,7 +17,7 @@ const Label={
         ['panda','sea\nurchin','Bouvier des\nFlandres','tree\nfrog','palace','snail','comic\nbook'],
         ['gibbon','sea\nurchin','sloth\nbear','hip','castle','teapot','butcher\nshop'],
     ],
-    'ResNet152':[//#替代模型为resnet152
+    'resnet152':[//#替代模型为resnet152
         ['komondor','sea\nurchin','skunk','apron','window\nscreen','terrapin','butcher\nshop'],
         ['standard\npoodle','sea\nurchin','bighorn','African\nchameleon','fire\nscreen','snail','theater\ncurtain'],
         ['orangutan','sea\nurchin','black bear','bib','window\nscreen','brain\ncoral','butcher\nshop'],
@@ -26,7 +26,7 @@ const Label={
         ['otterhound','sea\nurchin','jigsaw\npuzzle','poncho','jigsaw\npuzzle','terrapin','shoe shop'],
         ['orangutan','sea\nurchin','jigsaw\npuzzle','Christmas\nstocking','jigsaw\npuzzle','snail','butcher\nshop'],
     ],
-    'InceptionResNetV2':[//#替代模型为inceptionresnetv2
+    'inception_resnet_V2':[//#替代模型为inceptionresnetv2
         ['hog','echidna','black bear','ram','mosque','shower\ncap','brassiere'],
         ['baboon','lionfish','black bear','African\nchameleon','mosque','snail','wardrobe'],
         ['hog','trilobite','greenhouse','loggerhead','mosque','snail','handkerchief'],
@@ -39,9 +39,9 @@ const Label={
 }
 var advRow = ['AdvImg7','AdvImg6','AdvImg5','AdvImg4','AdvImg3','AdvImg2','AdvImg1'];
 const advCol = ['InceptionV3','InceptionV4','InceptionResnetV2','ResNet50','ResNet152','VGG16','VGG19'];
-
+var modelvalue = [];
 const value={
-    'VGG16':[
+    'vgg_16':[
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,1,0,0,0,0,0],
@@ -50,7 +50,7 @@ const value={
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
     ],
-    'InceptionV3':[
+    'inception_v3':[
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -59,7 +59,7 @@ const value={
         [1,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
     ],
-    'ResNet152':[
+    'resnet152':[
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -68,7 +68,7 @@ const value={
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
     ],
-    'InceptionResNetV2':[
+    'inception_resnet_V2':[
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -346,7 +346,8 @@ function showPreResult(){
 
     var tempH = value[opt];
     var heatmapData = [];
-    var data = []
+    var data = [];
+
     for(i = 0;i<7;i++)
         for(j = 0;j<7;j++){
             heatmapData.push([i,j,tempdata[i][j]]);
@@ -355,7 +356,7 @@ function showPreResult(){
         }
 
     //
-    var HeapDom = document.getElementById('heap');
+    var HeapDom = document.getElementById('heatmap');
     var heapChart = echarts.init(HeapDom);
     option = {
     tooltip: {
@@ -547,7 +548,7 @@ function nextChange() {
 }
 function heatmappshow(BackboxResult, model_names){
     
-    var opt = $("#sourcemodel option:selected").val();//上一次的结果
+    var opt = $("#sourcemodel option:selected").val();//模型
     // var opt = $("#box_select checked").val();
     console.log("opt")
     console.log(opt);
@@ -556,7 +557,24 @@ function heatmappshow(BackboxResult, model_names){
     console.log(tempdata);
     var tempH = value[opt];
     var heatmapData = [];
-    var data = []
+    var data = [];
+    var data1 = [];
+    var heatmapData1 = [];
+    var advRow1 = ["img_1","img_2","img_3","img_4","img_5","img_6","img_7"];
+    var advCol1 = [];
+    var i = 0
+    for (var key in BackboxResult){
+        advCol1.push(key);
+        for( var j =0 ;j <7 ;j++){
+            data1.push([i,j,BackboxResult[key]["img_"+(j+1)]["label"]]);
+            if ( ["three-toed sloth","Christmas stocking",'jigsaw puzzle','sea urchin','shopping basket','mosquito net','standard poodle'].indexOf(BackboxResult[key]["img_"+(j+1)]["label_name"])>=0){
+                BackboxResult[key]["img_"+(j+1)]["label_name"]=BackboxResult[key]["img_"+(j+1)]["label_name"].replace(/ /g, '\n');};
+                
+            heatmapData1.push([i,j,BackboxResult[key]["img_"+(j+1)]["label_name"]]);
+        
+        }
+        i = i + 1;
+    }
     for(i = 0;i<7;i++)
         for(j = 0;j<7;j++){
             heatmapData.push([i,j,tempdata[i][j]]);
@@ -565,7 +583,7 @@ function heatmappshow(BackboxResult, model_names){
         }
 
     // 
-    var HeapDom = document.getElementById('heap');
+    var HeapDom = document.getElementById('heatmap');
     var heapChart = echarts.init(HeapDom);
     option = {
     tooltip: {
@@ -589,7 +607,7 @@ function heatmappshow(BackboxResult, model_names){
         },
         nameGap:30,
         type: 'category',
-        data: advCol,
+        data: advCol1,
         axisLabel: {
             rotate:8,
             fontSize: 14,
@@ -607,7 +625,7 @@ function heatmappshow(BackboxResult, model_names){
     },
     yAxis: {
         type: 'category',
-        data: advRow,
+        data: advRow1,
         axisLabel: {
             fontSize: 14,
             color: "white",
@@ -637,7 +655,7 @@ function heatmappshow(BackboxResult, model_names){
         type: 'scatter',
         symbolSize:0.01,
         animationDuration: 3000,
-        data: heatmapData,
+        data: heatmapData1,
         label: {
             show: true,
             formatter: function (param) {
@@ -658,7 +676,7 @@ function heatmappshow(BackboxResult, model_names){
         {
         
         type: 'heatmap',
-        data: data,
+        data: data1,
         animationDuration: 3000,
         itemStyle:{
             borderWidth:2,
@@ -694,7 +712,7 @@ function backboxresult(){
             type: "POST",
             cache: false,
             data: data2,
-            url: "/get_attack",
+            url: "/get_backboxdata",
             dataType: "json",
 
             success: function (res) {
@@ -713,11 +731,11 @@ function backboxresult(){
             heatmappshow(BackboxResult,modelvalue);
             $('.filebtn1').removeAttr("disabled").css({"background-color":"transparent", "cursor": "default"});
         };
-    },2000000);
+    },20000);
 }
 function showPreResult(){
     var modellist = document.getElementsByName("method");//输入模型
-    var modelvalue = [];
+    
     for (var i=0;i<modellist.length;i++){
         if (modellist[i].checked) modelvalue.push(modellist[i].value);
     }
@@ -729,11 +747,11 @@ function showPreResult(){
     if(attackflag == false ){
         alert("请确认最新对抗样本是否生成！"); return;
     }
-    else {
-        // 防止重复提交
-        $('.filebtn1').attr("disabled", true).css({"background-color": "grey", "cursor": "no-drop"});
-        event.stopPropagation();
-    }
+    // else {
+    //     // 防止重复提交
+    //     $('.filebtn1').attr("disabled", true).css({"background-color": "grey", "cursor": "no-drop"});
+    //     event.stopPropagation();
+    // }
     data={
         model_names:JSON.stringify(modelvalue)
     };
@@ -750,9 +768,6 @@ function showPreResult(){
             console.log('----res----');
             console.log(res);
             Btid = res.tid
-        },
-        error: function (jqXHR) {
-            console.error(jqXHR);
         }
     });
     backboxresult();

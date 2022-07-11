@@ -4,7 +4,7 @@ import argparse
 import utils
 import csv
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import json
 
 # model_names=['inception_v3','inception_v4','inception_resnet_v2','resnet_v1_50','resnet_v1_152',
@@ -31,7 +31,7 @@ def verify(model_name,ori_image_path,adv_image_path):
     image_preprocessing_fn = utils.normalization_fn_map[model_name]
     image_size = utils.image_size[model_name]
 
-    batch_size=20
+    batch_size=2
     image_ph=tf.placeholder(dtype=tf.float32,shape=[batch_size,image_size,image_size,3])
 
     logits, _ = network_fn(image_ph)
