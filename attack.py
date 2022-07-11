@@ -13,7 +13,7 @@ from keras.utils import to_categorical
 # import time
 import utils
 import os
-#os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 # from scipy import misc
 # from scipy import ndimage
 # import PIL
@@ -31,9 +31,9 @@ tf.flags.DEFINE_string('attack_method', 'FIA', 'The name of attack method.')
 
 tf.flags.DEFINE_string('layer_name','vgg_16/conv3/conv3_3/Relu','The layer to be attacked.')
 
-tf.flags.DEFINE_string('input_dir', './dataset/images/', 'Input directory with images.')
+tf.flags.DEFINE_string('input_dir', './static/res/tmp/ori/', 'Input directory with images.')
 
-tf.flags.DEFINE_string('output_dir', './adv/FIA/', 'Output directory with images.')
+tf.flags.DEFINE_string('output_dir', './static/res/tmp/adv/', 'Output directory with images.')
 
 tf.flags.DEFINE_float('max_epsilon', 16.0, 'Maximum size of adversarial perturbation.')
 
