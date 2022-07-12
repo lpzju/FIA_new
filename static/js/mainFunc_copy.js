@@ -84,6 +84,7 @@ var attackflag = true;//上一次结果是否生成
 var Btid;
 var backEof = false;
 var modelvalue;
+var backres;
 //热力图 
 
 // 
@@ -562,16 +563,6 @@ function nextChange() {
 }
 function heatmappshow(BackboxResult, model_names){
     
-    var opt = $("#sourcemodel option:selected").val();//模型
-    // var opt = $("#box_select checked").val();
-    console.log("opt")
-    console.log(opt);
-    var tempdata = Label[opt];
-    console.log("tempdata")
-    console.log(tempdata);
-    var tempH = value[opt];
-    var heatmapData = [];
-    var data = [];
     var data1 = [];
     var heatmapData1 = [];
     var advRow1 = ["img_1","img_2","img_3","img_4","img_5","img_6","img_7"];
@@ -589,14 +580,7 @@ function heatmappshow(BackboxResult, model_names){
         }
         i = i + 1;
     }
-    for(i = 0;i<7;i++)
-        for(j = 0;j<7;j++){
-            heatmapData.push([i,j,tempdata[i][j]]);
-            console.log(i+"和"+j+"和"+tempdata[i][j]);
-            data.push([i,j,tempH[i][j]]);
-        }
-
-    // 
+   
     var HeapDom = document.getElementById('heatmap');
     var heapChart = echarts.init(HeapDom);
     option = {
@@ -749,7 +733,6 @@ function backboxresult(){
 }
 function showPreResult(){
     var modellist = document.getElementsByName("method");//输入模型
-    
     for (var i=0;i<modellist.length;i++){
         if (modellist[i].checked) modelvalue.push(modellist[i].value);
     }
@@ -781,9 +764,21 @@ function showPreResult(){
         success: function (res) {
             console.log('----res----');
             console.log(res);
-            Btid = res.tid
-        }
+            Btid = res.tid;
+            // backres = res
+            if (res.status == "error"){
+                alert("请先生成对抗样本！"); 
+                $('.filebtn1').removeAttr("disabled").css({"background-color":"transparent", "cursor": "default"});
+                $("#backboxloading").hide();
+                $("#heatmap").show();
+                return;
+            }
+            else{
+                backboxresult();
+            };
+            }
+        
     });
-    backboxresult();
+    
 };
 

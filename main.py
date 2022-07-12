@@ -218,13 +218,27 @@ def post_backbox():
             model_names.remove(",")
     print(model_names)
     param = {"model_names": model_names,
-    "ori_path":"./data/ori/",
-    "adv_path":"./data/adv/",
-    "output_file":"./data/%s.json" % tid,
+    "ori_path":"./static/res/tmp/ori/",
+    "adv_path":"./static/res/tmp/adv/",
+    "output_file":"./static/json/%s.json" % tid,
     "tid":tid
     }
     print("###########################param#############################\n")
     print(param)
+
+    # 检查对抗样本生成
+    if not os.path.exists(param["adv_path"]):
+        print("################################fail adv not found #############################")
+        return json.dumps({"status":"error","tid":tid,"errmsg":"No adversarial examples"})
+    files=os.listdir(param["adv_path"])
+    files_tmp=[]
+    for f in files:
+        #print(os.path.splitext(f)[-1])
+        if os.path.splitext(f)[-1]=='.png':
+            files_tmp.append(f)
+    if len(files_tmp)==0:
+        print("################################fail pic not found #############################")
+        return json.dumps({"status":"error","tid":tid,"errmsg":"No adversarial examples"})
     # 添加至任务列表
     Backboxdict[tid]={}
     Backboxdict[tid]["param"]=param
@@ -246,7 +260,7 @@ def post_backbox():
 @app.route('/get_backboxdata', methods=['POST'])
 def get_backbox():
     tid = request.form.get("tid")
-    path = "./data/"+tid+".json"
+    path = "./static/json/"+tid+".json"
     if os.path.exists(path):
         with open(path, "r") as fp:
             data = json.load(fp)
@@ -259,5 +273,5 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8880', debug=True)
+    app.run(host='0.0.0.0', port='24109', debug=True)
     # app.run(debug=True)

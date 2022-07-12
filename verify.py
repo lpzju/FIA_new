@@ -98,7 +98,7 @@ def verify(model_name,ori_image_path,adv_image_path):
 #             for _ in range(len(adv_label_names)):
 #                 f.write(str(adv_pre[_])+':'+adv_label_names[_]+':'+str(bool_value[_])+'\n')
 
-def test2(ori_path='./data/ori/',adv_path='./data/adv/',output_file='./data/log.json', model_names=['inception_v3','inception_v4','inception_resnet_v2','resnet_v1_50','resnet_v1_152','vgg_16','vgg_19']):
+def test2(ori_path='./static/res/tmp/ori/',adv_path='./static/res/tmp/adv/',output_file='./static/json/logresult.json', model_names=['inception_v3','inception_v4','inception_resnet_v2','resnet_v1_50','resnet_v1_152','vgg_16','vgg_19']):
     logs={}
     for model_name in model_names:
         print("model_name %s"%model_name)
