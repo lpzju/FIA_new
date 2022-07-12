@@ -332,12 +332,12 @@ def main(tid):
                 label_name=utils.get_label_name(labels_tmp)[:FLAGS.batch_size]
                 # print(label_name[:FLAGS.batch_size])
                 # with open(FLAGS.input_dir + '/labels.txt', 'a+') as f:
-                with open(FLAGS.output_dir + '/' + tid + '.txt', 'a+') as f:
+                with open(FLAGS.output_dir + '/labels.txt', 'a+') as f:
                     for _ in range(len(label_name)):
                         f.write(str(labels_tmp[_])+':'+label_name[_]+'\n')
 
                 # with open(FLAGS.input_dir + '/labels.json', 'a+') as f:
-                with open(FLAGS.output_dir + '/' + tid + '.json', 'a+') as f:
+                with open(FLAGS.output_dir + '/labels.json', 'a+') as f:
                     logs = {}
                     for _ in range(len(label_name)):
                         logs["img_" + str(_ + 1)] = {}

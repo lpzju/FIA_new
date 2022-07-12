@@ -90,7 +90,7 @@ def run_attack(paras):
     attack.FLAGS.model_name = paras["model_name"]
     attack.FLAGS.layer_name = paras["model_name"] + "/" + paras["layer_name"][:-2] + "/" + paras["layer_name"] + "/" + "Relu"
     attack.FLAGS.input_dir = "./static/res/tmp/ori/"
-    attack.FLAGS.output_dir = "./static/res/tmp/adv/"
+    attack.FLAGS.output_dir = "./static/res/tmp/adv/"+paras["tid"]+'/'
     attack.FLAGS.max_epsilon = float(paras["max_epsilon"])
     attack.FLAGS.num_iter = int(paras["num_iter"])
     attack.FLAGS.alpha = float(paras["alpha"])
@@ -109,7 +109,7 @@ def run_attack(paras):
 @app.route('/get_advresult', methods=['POST'])
 def get_advresult():
     tid = request.form.get("tid")
-    path = "./static/res/tmp/adv"
+    path = "./static/res/tmp/adv"+tid+'/'
     # files = os.listdir(path)
     # for filee in files:
         # print('filee为%s' %os.path.abspath(filee))
