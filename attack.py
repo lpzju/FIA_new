@@ -13,7 +13,7 @@ from keras.utils import to_categorical
 # import time
 import utils
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 # from scipy import misc
 # from scipy import ndimage
 # import PIL
