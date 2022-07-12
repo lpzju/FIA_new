@@ -110,12 +110,12 @@ def run_attack(paras):
 def get_advresult():
     tid = request.form.get("tid")
     path = "./static/res/tmp/adv"
-    files = os.listdir(path)
+    # files = os.listdir(path)
     # for filee in files:
         # print('filee为%s' %os.path.abspath(filee))
         # if os.path.isfile(filee):
-    print(files[0])
-    if (files[0]):
+    # print(files[0])
+    if len(os.listdir(path)):
         print('adv不为空,tid为 %s ' % tid)
         return json.dumps({"Eof": True})
     else:
