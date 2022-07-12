@@ -111,12 +111,15 @@ def get_advresult():
     tid = request.form.get("tid")
     path = "./static/res/tmp/adv"
     files = os.listdir(path)
-    for filee in files:
-        print('filee为%s' %os.path.abspath(filee))
-        if os.path.isfile(filee):
-            print('adv不为空,tid为 %s ' % tid)
-            return json.dumps({"Eof": True})
-    return json.dumps({"Eof": False})
+    # for filee in files:
+        # print('filee为%s' %os.path.abspath(filee))
+        # if os.path.isfile(filee):
+    print(files[0])
+    if (files[0]):
+        print('adv不为空,tid为 %s ' % tid)
+        return json.dumps({"Eof": True})
+    else:
+        return json.dumps({"Eof": False})
     # if os.path.isdir(path):
     #     print('adv不为空,tid为 %s '%tid)
     #     return json.dumps({"Eof": True})
@@ -267,5 +270,5 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='24109', debug=True)
+    app.run(host='0.0.0.0', port='8880', debug=True)
     # app.run(debug=True)

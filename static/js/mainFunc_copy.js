@@ -131,7 +131,7 @@ function at(w,x,y,c){
 }
 
 function req(fn){
-    var ret = "{{ url_for('static',filename='res/') }}" + fn
+    // var ret = "{{ url_for('static',filename='res/') }}" + fn
     // console.log("这是："+ret)
     return '/static/res/'+fn+'?t='+Math.random()
     // return 'http://10.99.140.140:14140/static/res/'+fn+'?t='+Math.random()
@@ -299,10 +299,10 @@ function showFeaFig(){
 
     w=100
     for (var i=0;i<7;i++){
-            name=vm.img_names[i]
+        name=vm.img_names[i]
             // console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_0.png')
         // this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
-        this.cvxFadeinImg2('digi-accspec','tmp/adv/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
+        this.cvxFadeinImg2('digi-accspec','tmp/adv/'+name+'_feature_1.png',1600,0*1600,w*i,0,80,80)
     }
 }
 
@@ -390,6 +390,7 @@ function opt() {
 }
 
 function advresult(){
+    var Eofdata;
     var timer=setInterval(()=>{
         data_adv = {
             tid: Atid
