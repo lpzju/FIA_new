@@ -81,7 +81,8 @@ const value={
 }
 
 var attackflag = true;//上一次结果是否生成
-var Atid,Btid;
+var Atid="";
+var Btid="";
 var backEof = false;
 var modelvalue;
 //热力图 
@@ -344,140 +345,7 @@ function showAdvFig(){
     }
 }
 
-function showPreResult(){
-    var opt = $("#sourcemodel option:selected").val();
-    console.log(opt+"haha");
-    var tempdata = Label[opt];
 
-    var tempH = value[opt];
-    var heatmapData = [];
-    var data = [];
-
-    for(i = 0;i<7;i++)
-        for(j = 0;j<7;j++){
-            heatmapData.push([i,j,tempdata[i][j]]);
-            console.log(i+"和"+j+"he"+tempdata[i][j]);
-            data.push([i,j,tempH[i][j]]);
-        }
-
-    //
-    var HeapDom = document.getElementById('heatmap');
-    var heapChart = echarts.init(HeapDom);
-    option = {
-    tooltip: {
-        position: 'top'
-    },
-    grid: {
-        height: '50%',
-        top: '10%'
-    },
-    xAxis: {
-        name:"目标模型",
-        nameLocation:'middle',
-        nameTextStyle:{
-            fontSize: 20,
-            color: "rgba(4, 249, 208, 1)",
-            fontWeight: "bolder",
-            textBorderColor: "rgba(139, 238, 103, 0.98)",
-            textBorderWidth: 0.5,
-            textBorderType: "solid",
-        },
-        nameGap:30,
-        type: 'category',
-        data: advCol,
-        axisLabel: {
-            rotate:8,
-            fontSize: 10,
-            color: "rgba(4, 249, 208, 1)",
-            fontWeight: "bolder",
-            textBorderColor: "rgba(139, 238, 103, 0.98)",
-            textBorderWidth: 0.5,
-            textBorderType: "solid",
-
-        },
-        position:'top',
-        splitArea: {
-        show: true
-        }
-    },
-    yAxis: {
-        type: 'category',
-        data: advRow,
-        axisLabel: {
-            fontSize: 10,
-            color: "rgba(4, 249, 208, 1)",
-            fontWeight: "bolder",
-            textBorderColor: "rgba(139, 238, 103, 0.98)",
-            textBorderWidth: 0.5,
-            textBorderType: "solid",
-
-        },
-        splitArea: {
-        show: true
-        }
-    },
-    visualMap: {
-        show:false,
-        min: 0,
-        max: 1,
-        seriesIndex:[1],
-        orient: 'horizontal',
-        color:['#3CB371','#B22222'],
-        left: 'center',
-        bottom: '15%'
-    },
-    series: [
-        {
-        name: 'wat',
-        type: 'scatter',
-        symbolSize:0.01,
-        animationDuration: 3000,
-        data: heatmapData,
-        label: {
-            show: true,
-            formatter: function (param) {
-            return param.value[2];
-            },
-            fontSize:13,
-            fontStyle:{
-
-            }
-        },
-        emphasis: {
-            itemStyle: {
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-        }
-        },
-        {
-
-        type: 'heatmap',
-        data: data,
-        animationDuration: 3000,
-        itemStyle:{
-            borderWidth:2,
-            borderColor:'#fff',
-            opacity:1.0,
-        },
-        label: {
-            show: false,
-            formatter: function (params) {
-            return params.value[2] + '\n\n';
-            },
-        },
-        emphasis: {
-            itemStyle: {
-            shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-        }
-        }
-    ]
-    };
-    heapChart.setOption(option);
-
-}
 
 function opt() {
     var modal = $('#sourcemodel option:selected').val();
@@ -494,6 +362,7 @@ function opt() {
     else if(!move||!times||!steps){
         alert("输入选项为空！"); return;
     }
+    // tid = new Date().getTime();
 
     data = {
         modal: modal,
@@ -501,6 +370,7 @@ function opt() {
         max_mv: move,
         mv_times: times,
         stp_times: steps,
+        // tid:tid,
     };
     $.ajax({
         type: "POST",
@@ -510,8 +380,10 @@ function opt() {
         datatype: "json",
         success: function (res) {
             console.log('----opt res----');
+            res=JSON.parse(res);
             console.log(res);
             Atid = res.tid;
+            
         },
         error: function (jqXHR) {
             console.log(jqXHR);
@@ -765,8 +637,8 @@ function showPreResult(){
     if(modelvalue.length == 0 ){
         alert("请确认输入选项不为空！"); return;
     }
-    if(attackflag == false ){
-        alert("请确认最新对抗样本是否生成！"); return;
+    if(Atid == "" ){
+        alert("请先生成对抗样本"); return;
     }
     else {
         // 防止重复提交
@@ -774,7 +646,8 @@ function showPreResult(){
         event.stopPropagation();
     }
     data={
-        model_names:JSON.stringify(modelvalue)
+        model_names:JSON.stringify(modelvalue),
+        Atid:Atid
     };
     console.log(data);
     $("#backboxloading").show();

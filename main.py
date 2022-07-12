@@ -79,7 +79,8 @@ def adv_gen():
             t1.setDaemon(True)
             t1.start()
             Eofdata=True
-        return json.dumps({"states": "success", "tid": paras["tid"] })
+        return json.dumps({"states":"success","tid":tid})
+        
 
 
 def run_attack(paras):
@@ -202,9 +203,10 @@ def post_backbox():
         if x == ",":
             model_names.remove(",")
     print(model_names)
+    Atid=request.form.get("Atid")
     param = {"model_names": model_names,
     "ori_path":"./static/res/tmp/ori/",
-    "adv_path":"./static/res/tmp/adv/",
+    "adv_path":"./static/res/tmp/adv/%s" % Atid,
     "output_file":"./static/json/%s.json" % tid,
     "tid":tid
     }
