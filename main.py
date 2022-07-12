@@ -109,7 +109,7 @@ def run_attack(paras):
 @app.route('/get_advresult', methods=['POST'])
 def get_advresult():
     tid = request.form.get("tid")
-    path = "./static/res/tmp/adv"+tid+'/'
+    path = "./static/res/tmp/adv/"+tid+'/'
     # files = os.listdir(path)
     # for filee in files:
         # print('filee为%s' %os.path.abspath(filee))
