@@ -49,51 +49,49 @@ def uploaded_file(filename):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def showimages():
+def adv_gen():
     global Eofdata
     if request.method == "GET":
         return render_template("FIA_v2.html")
     else:
+        curr_time = str(datetime.datetime.now(pytz.timezone('Asia/Shanghai')).strftime("%Y%m%d_%H%M"))
+        m = hashlib.md5()
+        m.update(("FIA_" + str(time.time()) + "_" + str(salt)).encode('utf-8'))
+        print(m)
+        tid_temp = "%s_%s" % (curr_time, m.hexdigest())
+        tid = tid_temp[:21]
+        print("#####################################tid:%s#####################################" % tid)
+
         paras = {
             "model_name": request.form.get("modal"),
             "layer_name": request.form.get("layer"),
             "max_epsilon": request.form.get("max_mv"),
             "num_iter": request.form.get("mv_times"),
             "alpha": request.form.get("stp_times"),
-            "tid":request.form.get('task_id')
+            "tid": tid
         }
-        print('#' * 10 + "param" + '#' * 10)
+        print('#' * 10 + "adv param" + '#' * 10)
         print(paras)
-        # if Eofdata == False:
-        print('----ready to t1 -----')
-        # run_attack(paras)
-        t1 = threading.Thread(target=run_attack, args=(paras,))
-        print('---- thread----------')
-        t1.setDaemon(True)
-        t1.start()
-        if(Eofdata==True):
-            print('Eofdata='+Eofdata)
-            return json.dumps({"states": "success", "tid": paras["tid"] })
+        if Eofdata == False:
+            print('----ready to t1 -----')
+            t1 = threading.Thread(target=run_attack, args=(paras,))
+            print('---- thread----------')
+            t1.setDaemon(True)
+            t1.start()
+            Eofdata=True
+        return json.dumps({"states": "success", "tid": paras["tid"] })
 
-        # Eofdata = True
-        # run_attack(paras)
-        # if Eofdata == True:
-        #     print('eof==true')
-        #     return json.dumps({"states": "success", "Eof":Eofdata})
 
 def run_attack(paras):
     global Eofdata
     Eofdata = False
     _ = None
     attack.FLAGS.model_name = paras["model_name"]
-    attack.FLAGS.layer_name = paras["model_name"] + "/" + paras["layer_name"][:-2] + "/" + paras[
-        "layer_name"] + "/" + "Relu"
-    print(attack.FLAGS.layer_name)
+    attack.FLAGS.layer_name = paras["model_name"] + "/" + paras["layer_name"][:-2] + "/" + paras["layer_name"] + "/" + "Relu"
     attack.FLAGS.input_dir = "./static/res/tmp/ori/"
     attack.FLAGS.output_dir = "./static/res/tmp/adv/"
     attack.FLAGS.max_epsilon = float(paras["max_epsilon"])
     attack.FLAGS.num_iter = int(paras["num_iter"])
-    # print(attack.FLAGS)
     attack.FLAGS.alpha = float(paras["alpha"])
     try:
         print("attack.FLAGS.model_name为"+attack.FLAGS.model_name)
@@ -106,29 +104,16 @@ def run_attack(paras):
 
     except:
         print("执行失败")
-    # finally:
-    #     Eofdata = True
-        # time.sleep(40)
 
-def upload_file():
-    if request.method == "GET":
-        return render_template("FIA_v2.html")
+@app.route('/get_advresult', methods=['POST'])
+def get_advresult():
+    tid = request.form.get("tid")
+    path = "./static/res/tmp/adv"
+    if os.path.isdir(path):
+        print('adv不为空,tid为'+tid)
+        return json.dumps({"Eof": True})
     else:
-        paras = {
-            "model_name": request.form.get("modal"),
-            "layer_name": request.form.get("layer"),
-            "max_epsilon": request.form.get("max_mv"),
-            "num_iter": request.form.get("mv_times"),
-            "alpha": request.form.get("stp_times"),
-        }
-        print(paras)
-        return json.dumps({"states": "success"})
-        # file = request.files['file']
-        # if file and allowed_file(file.filename):
-        #     filename = secure_filename(file.filename)
-        #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # file_url = url_for('uploaded_file', filename=filename)
-        # return html + '<br><img src=' + file_url + '>'
+        return json.dumps({"Eof": False})
 
 # 任务消耗池
 def Taskrun():

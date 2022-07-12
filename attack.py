@@ -204,10 +204,8 @@ def load_image(images_list,image_size,batch_size):
 
 
 def main(_):
-
-    print("main")
-
     if FLAGS.model_name in ['vgg_16','vgg_19', 'resnet_v1_50','resnet_v1_152']:
+        print('FLAGS.model_name在预留模型内')
         eps = FLAGS.max_epsilon
         alpha = FLAGS.alpha
     else:
@@ -219,20 +217,20 @@ def main(_):
     
     num_iter = FLAGS.num_iter
     momentum = FLAGS.momentum
-    print("********************Flags****************")
+    # print("********************Flags****************")
     image_preprocessing_fn = utils.normalization_fn_map[FLAGS.model_name]
-    print("***********normalization**************************")
+    # print("***********normalization**************************")
     inv_image_preprocessing_fn = utils.inv_normalization_fn_map[FLAGS.model_name]
-    print("*****************************************inv_fn_map**************************")
+    # print("*****************************************inv_fn_map**************************")
     FLAGS.image_size=utils.image_size[FLAGS.model_name]
-    print("*********imagesize**********************")
+    # print("*********imagesize**********************")
     batch_shape = [FLAGS.batch_size, FLAGS.image_size, FLAGS.image_size, 3]
     checkpoint_path = utils.checkpoint_paths[FLAGS.model_name]
     layer_name=FLAGS.layer_name
 
     with tf.Graph().as_default():
         # Prepare graph
-        print("###################################with#################################")
+        print("###################################Prepare graph#################################")
         ori_input  = tf.placeholder(tf.float32, shape=batch_shape)
         adv_input = tf.placeholder(tf.float32, shape=batch_shape)
         num_classes = 1000 + utils.offset[FLAGS.model_name]
@@ -242,7 +240,7 @@ def main(_):
 
         network_fn = utils.nets_factory.get_network_fn(FLAGS.model_name, num_classes=num_classes, is_training=False)
         x=tf.concat([ori_input,adv_input],axis=0)
-        print("####################concat####################")
+        # print("####################concat####################")
 
         # whether using DIM or not
         if 'DI' in FLAGS.attack_method:
@@ -253,7 +251,7 @@ def main(_):
         problity=tf.nn.softmax(logits,axis=1)
         pred = tf.argmax(logits, axis=1)
         one_hot = tf.one_hot(pred, num_classes)
-        print("########################one-hot##########################")
+        # print("########################one-hot##########################")
 
         entropy_loss = tf.losses.softmax_cross_entropy(one_hot[:FLAGS.batch_size], logits[FLAGS.batch_size:])
 
@@ -266,11 +264,12 @@ def main(_):
         elif 'NRDM' in FLAGS.attack_method:
             loss = get_nrdm_loss(opt_operations)
         elif 'FIA' in FLAGS.attack_method:
+            print('############ FIA loss calculating ###########')
             weights_tensor = tf.gradients(logits * label_ph, opt_operations[0])[0]
             loss = get_fia_loss(opt_operations,weights_ph)
         else:
             loss = entropy_loss
-        print("################################loss function###################")
+        # print("################################loss function###################")
 
         gradient=tf.gradients(loss,adv_input)[0]
 
@@ -285,7 +284,7 @@ def main(_):
         # the default optimization process with momentum
         noise = noise / tf.reduce_mean(tf.abs(noise), [1, 2, 3], keep_dims=True)
         noise = momentum * accumulated_grad_ph + noise
-        print("######################################noise TI########################")
+        # print("######################################noise TI########################")
 
         # whether using PIM or not
         if 'PI' in FLAGS.attack_method:
@@ -305,7 +304,7 @@ def main(_):
             adv_input_update = adv_input_update + alpha_beta * tf.sign(noise) + projection
         else:
             adv_input_update = adv_input_update + alpha * tf.sign(noise)
-        print("####################PI#######################")
+        # print("####################PI#######################")
 
 
         saver=tf.train.Saver()
@@ -326,6 +325,7 @@ def main(_):
                 # label name
                 labels_tmp=np.argmax(labels,axis=-1)
                 if FLAGS.model_name not in ['resnet_v1_50','resnet_v1_152','vgg_16','vgg_19']:
+                    print('model name不在预选内')
                     labels_tmp=labels_tmp-1
                 #print(names)
                 #print(labels_tmp[:FLAGS.batch_size])
@@ -401,5 +401,5 @@ def main(_):
                 utils.save_image(images_adv, names, FLAGS.output_dir)
                 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-if __name__ == '__main__':
-    tf.app.run()
+# if __name__ == '__main__':
+#     tf.app.run()
