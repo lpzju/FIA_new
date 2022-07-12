@@ -81,11 +81,13 @@ const value={
 }
 
 var attackflag = true;//上一次结果是否生成
-var Btid;
+var Atid,Btid;
 var backEof = false;
 var modelvalue;
 //热力图 
-
+$('#ori_text').hide()
+$('#middle_text').hide()
+$('#adv_text').hide()
 // 
 
 var vm={
@@ -115,9 +117,11 @@ var vm={
     // models:[{name:'InceptionV3',processing:false},{name:'InceptionV4',processing:false},{name:'InceptionResnetV2',processing:false},
     // {name:'ResNet50',processing:false},{name:'ResNet152',processing:false},{name:'VGG16',processing:false},{name:'VGG19',processing:false}]
     imgs:['AdvImg1','AdvImg2','AdvImg3','AdvImg4','AdvImg5','AdvImg6','AdvImg7'],
-    img_names:[1,3,7,12,17,18,20],
+    // img_names:[1,3,7,12,17,18,20],
+    img_names:[1,2,3,4,5,6],
+    ground_truth:['panda','gondola','lycaenid','coot','lorikeet','ballplayer'],
     sourceModel: "VGG16",
-    ground_truth:['panda','lycaenid','ostrich','lycaenid','monastery','espresso','military uniform'],
+    // ground_truth:['panda','lycaenid','ostrich','lycaenid','monastery','espresso','military uniform'],
 
 }
 
@@ -269,6 +273,7 @@ function cvxWipeImg2(cvxid,imgsrc,duration,start_time,x,y,w,h){
     }
 }
 function showOriFig(){
+    $('#ori_text').show()
     w=100
     for (var i=0;i<10;i++){
             name=vm.img_names[i]
@@ -283,11 +288,9 @@ function showOriFig(){
         label=vm.ground_truth[i];
         ctx.fillText(label,w*i+5,110)
     }
-
-
 }
-function showFeaFig(){
 
+function showFeaFig(){
     var obj=document.getElementById("sourcemodel")
     // console.log("obj为"+obj)
     vm.sourceModel=obj.options[obj.selectedIndex].value
@@ -319,7 +322,6 @@ function optimize(){
     while(flag){
         console.log("waiting");
     };
-
 }
 
 function showAdvFig(){
@@ -478,23 +480,20 @@ function showPreResult(){
 }
 
 function opt() {
-    var eof = false
-    // var timer1 = setInterval(()=> {
     var modal = $('#sourcemodel option:selected').val();
     var layer = $('#second option:selected').text();
     var move = document.getElementById('max_move').value;
     var times = document.getElementById('move_times').value;
     var steps = document.getElementById('step_times').value;
 
-    console.log("参数确认：");
+    console.log("对抗样本生成参数确认：");
     console.log(modal, layer, move, times, steps);
-    // if(modal & layer & move & times & steps ){
-    //     return;
-    // }
-    // else {
-    //     alert("请确认输入选项不为空！"); return;
-    // }
-    tid = new Date().getTime();
+    if(modal.length==0){
+        alert("请选择替代模型！"); return;
+    }
+    else if(!move||!times||!steps){
+        alert("输入选项为空！"); return;
+    }
 
     data = {
         modal: modal,
@@ -502,26 +501,52 @@ function opt() {
         max_mv: move,
         mv_times: times,
         stp_times: steps,
-        task_id: tid
     };
     $.ajax({
         type: "POST",
-        // cache: false,
+        cache: false,
         data: data,
         url: "/",
         datatype: "json",
         success: function (res) {
-            tid = res.tid;
+            console.log('----opt res----');
             console.log(res);
-
+            Atid = res.tid;
         },
         error: function (jqXHR) {
             console.log(jqXHR);
         }
     })
-    showFeaFig();
-    optimize();
-    showAdvFig()
+    advresult();
+}
+
+function advresult(){
+    var timer=setInterval(()=>{
+        data_adv = {
+            tid: Atid
+        }
+        $.ajax({
+            type: "POST",
+            cache: false,
+            data: data2,
+            url: "/get_advresult",
+            dataType: "json",
+
+            success: function (res) {
+                //判断结束标志
+                Eofdata = res.eof;
+            }
+        })
+        if (Eofdata==true){
+            clearInterval(timer);
+            $('#middle_text').show();
+            $('#adv_text').show();
+            showFeaFig();
+            optimize();
+            showAdvFig()
+        }
+    }, 20000);
+
 }
 
 function nextChange() {

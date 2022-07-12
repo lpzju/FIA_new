@@ -211,14 +211,14 @@
                              style="position: absolute;height: 100%; width: 100%;">
                         <div class="main_top_echarts_con_title">中间过程</div>
                         <div>
-                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:5%; float:left;">原始图像</div>
+                            <div class="h5_class" id='ori_text' style="width:10%; color: whitesmoke;margin:5%; float:left;">原始图像</div>
                             <div style="width: 80%;height: 100%;float: right;">
                                 <canvas id='digi-accplot' width=600 height=110
                                         style="margin-right: 10%;  float: right;"></canvas>
                             </div>
                         </div>
                         <div>
-                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:5%; float:left;">中间特征
+                            <div class="h5_class" id='middle_text' style="width:10%; color: whitesmoke;margin:5%; float:left;">中间特征
                             </div>
                             <div style="width: 80%;height: 100%;float: right;">
                                 <canvas id='digi-accspec' width=600 height=100
@@ -226,7 +226,7 @@
                             </div>
                         </div>
                         <div>
-                            <div class="h5_class" style="width:10%; color: whitesmoke;margin:5% 5% 0;float: left">对抗图像</div>
+                            <div class="h5_class" id='adv_text' style="width:10%; color: whitesmoke;margin:5% 5% 0;float: left">对抗图像</div>
                             <div style="width: 80%;height: 100%;float: right;">
                                 <canvas id='digi-slice' width=600 height=100
                                         style="margin-top: 0%;margin-right: 10%;float:right"></canvas>
