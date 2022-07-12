@@ -528,7 +528,7 @@ function advresult(){
         $.ajax({
             type: "POST",
             cache: false,
-            data: data2,
+            data: data_adv,
             url: "/get_advresult",
             dataType: "json",
 
