@@ -99,7 +99,7 @@ def run_attack(paras):
         print("attack.FLAGS.layer_name为"+attack.FLAGS.layer_name)
         print("attack.FLAGS.input_dir为" + attack.FLAGS.input_dir)
         print("attack.FLAGS.output_dir为" + attack.FLAGS.output_dir)
-        attack.main(_)
+        attack.main(paras["tid"])
         Eofdata = True
         print('attack.main执行结束')
 
@@ -110,11 +110,18 @@ def run_attack(paras):
 def get_advresult():
     tid = request.form.get("tid")
     path = "./static/res/tmp/adv"
-    if os.path.isdir(path):
-        print('adv不为空,tid为'+tid)
-        return json.dumps({"Eof": True})
-    else:
-        return json.dumps({"Eof": False})
+    files = os.listdir(path)
+    for filee in files:
+        print('filee为%s' %os.path.abspath(filee))
+        if os.path.isfile(filee):
+            print('adv不为空,tid为 %s ' % tid)
+            return json.dumps({"Eof": True})
+    return json.dumps({"Eof": False})
+    # if os.path.isdir(path):
+    #     print('adv不为空,tid为 %s '%tid)
+    #     return json.dumps({"Eof": True})
+    # else:
+    #     return json.dumps({"Eof": False})
 
 # 任务消耗池
 def Taskrun():

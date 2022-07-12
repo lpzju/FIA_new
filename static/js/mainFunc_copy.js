@@ -362,7 +362,6 @@ function opt() {
     else if(!move||!times||!steps){
         alert("输入选项为空！"); return;
     }
-    // tid = new Date().getTime();
 
     data = {
         modal: modal,
@@ -370,7 +369,6 @@ function opt() {
         max_mv: move,
         mv_times: times,
         stp_times: steps,
-        // tid:tid,
     };
     $.ajax({
         type: "POST",
@@ -383,7 +381,6 @@ function opt() {
             res=JSON.parse(res);
             console.log(res);
             Atid = res.tid;
-            
         },
         error: function (jqXHR) {
             console.log(jqXHR);
@@ -406,7 +403,8 @@ function advresult(){
 
             success: function (res) {
                 //判断结束标志
-                Eofdata = res.eof;
+                Eofdata = res.Eof;
+                console.log('Eofdata为'+Eofdata)
             }
         })
         if (Eofdata==true){
