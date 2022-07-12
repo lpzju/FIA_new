@@ -297,11 +297,11 @@ function showFeaFig(){
     for (var i=0;i<7;i++){
             name=vm.img_names[i]
             // console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_0.png')
-            this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
+        // this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
+        this.cvxFadeinImg2('digi-accspec','tmp/adv/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
     }
-
-
 }
+
 function optimize(){
 
     w=100
@@ -310,8 +310,9 @@ function optimize(){
     for(var f=1;f<10;f++){
         for(var i=0;i<7;i++){
             name=vm.img_names[i]
-            console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png')
-            this.cvxWipeImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
+            // console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png')
+            // this.cvxWipeImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
+            this.cvxWipeImg2('digi-accspec','tmp/adv/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
         }
     if(f == 9) flag = false;
     }
@@ -320,11 +321,14 @@ function optimize(){
     };
 
 }
+
 function showAdvFig(){
     w=100
     for (var i=0;i<7;i++){
             name=vm.img_names[i]
-            this.cvxFadeinImg2('digi-slice','tmp/'+vm.sourceModel+'/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
+            // this.cvxFadeinImg2('digi-slice','tmp/'+vm.sourceModel+'/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
+        // this.cvxFadeinImg2('digi-slice','tmp/adv/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
+        this.cvxFadeinImg2('digi-slice','tmp/adv/'+name+'_1.png',2000,0*2000,w*i,0,80,80)
     }
 
     var cvx = document.getElementById('digi-slice')
@@ -336,9 +340,8 @@ function showAdvFig(){
         // ctx.fillStyle = '#ffffff';
         ctx.fillText(img, 16+w*i,165)
     }
-
-
 }
+
 function showPreResult(){
     var opt = $("#sourcemodel option:selected").val();
     console.log(opt+"haha");

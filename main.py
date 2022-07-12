@@ -65,15 +65,15 @@ def showimages():
         print('#' * 10 + "param" + '#' * 10)
         print(paras)
         # if Eofdata == False:
-        # print('----ready to t1 -----')
-        run_attack(paras)
-        # t1 = threading.Thread(target=run_attack, args=(paras,))
-        # print('---- thread----------')
-        # t1.setDaemon(True)
-        # t1.start()
-        Eofdata = True
-        print('Eofdata='+Eofdata)
-        return json.dumps({"states": "success", "tid": paras["tid"] })
+        print('----ready to t1 -----')
+        # run_attack(paras)
+        t1 = threading.Thread(target=run_attack, args=(paras,))
+        print('---- thread----------')
+        t1.setDaemon(True)
+        t1.start()
+        if(Eofdata==True):
+            print('Eofdata='+Eofdata)
+            return json.dumps({"states": "success", "tid": paras["tid"] })
 
         # Eofdata = True
         # run_attack(paras)
@@ -84,6 +84,7 @@ def showimages():
 def run_attack(paras):
     global Eofdata
     Eofdata = False
+    _ = None
     attack.FLAGS.model_name = paras["model_name"]
     attack.FLAGS.layer_name = paras["model_name"] + "/" + paras["layer_name"][:-2] + "/" + paras[
         "layer_name"] + "/" + "Relu"
@@ -95,9 +96,14 @@ def run_attack(paras):
     # print(attack.FLAGS)
     attack.FLAGS.alpha = float(paras["alpha"])
     try:
-        print('attack开始执行main')
-        attack.main()
+        print("attack.FLAGS.model_name为"+attack.FLAGS.model_name)
+        print("attack.FLAGS.layer_name为"+attack.FLAGS.layer_name)
+        print("attack.FLAGS.input_dir为" + attack.FLAGS.input_dir)
+        print("attack.FLAGS.output_dir为" + attack.FLAGS.output_dir)
+        attack.main(_)
+        Eofdata = True
         print('attack.main执行结束')
+
     except:
         print("执行失败")
     # finally:
