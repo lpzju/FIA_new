@@ -476,7 +476,7 @@ function heatmappshow(BackboxResult, model_names){
         advCol1.push(key);
         for( var j =0 ;j <7 ;j++){
             data1.push([i,j,BackboxResult[key]["img_"+(j+1)]["label"]]);
-            if ( ["three-toed sloth","Christmas stocking",'jigsaw puzzle','sea urchin','shopping basket','mosquito net','standard poodle'].indexOf(BackboxResult[key]["img_"+(j+1)]["label_name"])>=0){
+            if ( ["three-toed sloth","Christmas stocking",'jigsaw puzzle','sea urchin','shopping basket','mosquito net','standard poodle','African chameleon','Indian elephant','cocker spaniel',"croquet ball","carpenter's kit"].indexOf(BackboxResult[key]["img_"+(j+1)]["label_name"])>=0){
                 BackboxResult[key]["img_"+(j+1)]["label_name"]=BackboxResult[key]["img_"+(j+1)]["label_name"].replace(/ /g, '\n');};
                 
             heatmapData1.push([i,j,BackboxResult[key]["img_"+(j+1)]["label_name"]]);
@@ -649,11 +649,11 @@ function showPreResult(){
     if(Atid == "" ){
         alert("请先生成对抗样本"); return;
     }
-    else {
-        // 防止重复提交
-        $('.filebtn1').attr("disabled", true).css({"background-color": "grey", "cursor": "no-drop"});
-        event.stopPropagation();
-    }
+    // else {
+    //     // 防止重复提交
+    //     $('.filebtn1').attr("disabled", true).css({"background-color": "grey", "cursor": "no-drop"});
+    //     event.stopPropagation();
+    // }
     data={
         model_names:JSON.stringify(modelvalue),
         Atid:Atid

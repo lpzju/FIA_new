@@ -122,8 +122,8 @@ def test2(ori_path='./static/res/tmp/ori/',adv_path='./static/res/tmp/adv/',outp
         for _ in range(len(adv_label_names)):
             logs[model_name]["img_"+str(_+1)]={}
             logs[model_name]["img_"+str(_+1)]["label_name"]=adv_label_names[_]
-            logs[model_name]["img_" + str(_ + 1)]["label"] = int(bool_value)
-            # logs[model_name]["img_"+str(_+1)]["label"] = int(bool_value[_])
+            # logs[model_name]["img_" + str(_ + 1)]["label"] = int(bool_value)
+            logs[model_name]["img_"+str(_+1)]["label"] = int(bool_value[_])
     with open(output_file, 'w') as f:       
         json.dump(logs,f)
 
