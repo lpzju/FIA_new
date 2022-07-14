@@ -57,10 +57,15 @@ def verify(model_name,ori_image_path,adv_image_path):
             dd=f.read().split('\n')[:-1]
             for d in dd:
                 ori_pre.append(int(d.split(':')[0]))
+        # print("#############################adv image path #####################")
+        # print(adv_image_path,image_size,image_size)
 
         for images,names in utils.load_image(adv_image_path, image_size, batch_size):
-            #print(names)
+            # print("********************************names****************************")
+            # print(images)
             images=image_preprocessing_fn(images)
+            # print("********************************images****************************")
+            # print(images)
             pres=sess.run(predictions,feed_dict={image_ph:images})
             adv_pre.extend(pres)
 

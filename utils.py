@@ -130,11 +130,13 @@ def load_image(image_path, image_size, batch_size):
     files=os.listdir(image_path)
     files_tmp=[]
     for f in files:
-        #print(os.path.splitext(f)[-1])
-        if os.path.splitext(f)[-1]=='.png':
+        # print("*********************file******************************")
+        # print(os.path.splitext(f)[0])
+        if os.path.splitext(f)[-1]=='.png' and "feature" not in os.path.splitext(f)[0]:
+        # if os.path.splitext(f)[-1]=='.png':
             files_tmp.append(f)
     files=files_tmp
-    #print('files:',files)
+    print('files:',files)
     files.sort(key=lambda x: int(x[:-4]))
     for i,filename in enumerate(files):
         #if 'png' not in filename:

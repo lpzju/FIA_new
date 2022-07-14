@@ -628,6 +628,7 @@ function backboxresult(){
     },20000);
 }
 function showPreResult(){
+    modelvalue = [];
     var modellist = document.getElementsByName("method");//输入模型
     for (var i=0;i<modellist.length;i++){
         if (modellist[i].checked) modelvalue.push(modellist[i].value);

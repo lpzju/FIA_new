@@ -115,6 +115,8 @@ def get_advresult():
         # print('filee为%s' %os.path.abspath(filee))
         # if os.path.isfile(filee):
     # print(files[0])
+    if not os.path.exists(path):
+        return json.dumps({"Eof": False})
     if len(os.listdir(path)):
         print('adv不为空,tid为 %s ' % tid)
         return json.dumps({"Eof": True})
@@ -216,7 +218,7 @@ def post_backbox():
     Atid=request.form.get("Atid")
     param = {"model_names": model_names,
     "ori_path":"./static/res/tmp/ori/",
-    "adv_path":"./static/res/tmp/adv/%s" % Atid,
+    "adv_path":"./static/res/tmp/adv/%s/" % Atid,
     "output_file":"./static/json/%s.json" % tid,
     "tid":tid
     }
@@ -270,5 +272,5 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8880', debug=True)
+    app.run(host='0.0.0.0', port='24109', debug=True)
     # app.run(debug=True)
