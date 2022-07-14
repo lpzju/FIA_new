@@ -45,7 +45,7 @@ tf.flags.DEFINE_integer('batch_size', 10, 'How many images process at one time.'
 
 tf.flags.DEFINE_float('momentum', 1.0, 'Momentum.')
 
-tf.flags.DEFINE_string('GPU_ID', '0', 'which GPU to use.')
+tf.flags.DEFINE_string('GPU_ID', '3', 'which GPU to use.')
 
 """parameter for DIM"""
 tf.flags.DEFINE_integer('image_size', 224, 'size of each input images.')
@@ -227,6 +227,10 @@ def main(tid):
     batch_shape = [FLAGS.batch_size, FLAGS.image_size, FLAGS.image_size, 3]
     checkpoint_path = utils.checkpoint_paths[FLAGS.model_name]
     layer_name=FLAGS.layer_name
+    print('layer_name为'+str(layer_name))
+    print('max_epsilon为' + str(eps))
+    print('num_iter为' + str(num_iter))
+    print('alpha为' + str(alpha))
 
     with tf.Graph().as_default():
         # Prepare graph

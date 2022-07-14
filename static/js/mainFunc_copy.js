@@ -276,16 +276,17 @@ function cvxWipeImg2(cvxid,imgsrc,duration,start_time,x,y,w,h){
 function showOriFig(){
     $('#ori_text').show()
     w=100
-    for (var i=0;i<10;i++){
-            name=vm.img_names[i]
-            this.cvxFadeinImg2('digi-accplot','tmp/ori/'+name+'.png',1800,0*1800,w*i,0,80,80)
+    // for (var i=0;i<10;i++){
+    for (var i=0;i<6;i++){
+        name=vm.img_names[i]
+        this.cvxFadeinImg2('digi-accplot','tmp/ori/'+name+'.png',1800,0*1800,w*i,0,80,80)
     }
 
     var cvx = document.getElementById('digi-accplot')
     var ctx = cvx.getContext('2d')
     ctx.font="18px Times";
     ctx.fillStyle = "#FFFFFF";
-    for (var i=0;i<7;i++){
+    for (var i=0;i<6;i++){
         label=vm.ground_truth[i];
         ctx.fillText(label,w*i+5,110)
     }
@@ -298,7 +299,7 @@ function showFeaFig(){
     // console.log("vm为"+vm.sourceModel)
 
     w=100
-    for (var i=0;i<7;i++){
+    for (var i=0;i<6;i++){
         name=vm.img_names[i]
             // console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_0.png')
         // this.cvxFadeinImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_0.png',1600,0*1600,w*i,0,80,80)
@@ -312,7 +313,7 @@ function optimize(){
     t=1000
     flag = true
     for(var f=1;f<10;f++){
-        for(var i=0;i<7;i++){
+        for(var i=0;i<6;i++){
             name=vm.img_names[i]
             // console.log('tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png')
             // this.cvxWipeImg2('digi-accspec','tmp/'+vm.sourceModel+'/'+name+'_feature_'+f+'.png',t,(t+500)*f,w*i,0,80,80)
@@ -327,7 +328,7 @@ function optimize(){
 
 function showAdvFig(){
     w=100
-    for (var i=0;i<7;i++){
+    for (var i=0;i<6;i++){
             name=vm.img_names[i]
             // this.cvxFadeinImg2('digi-slice','tmp/'+vm.sourceModel+'/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
         // this.cvxFadeinImg2('digi-slice','tmp/adv/'+name+'_9.png',2000,0*2000,w*i,0,80,80)
@@ -350,7 +351,7 @@ function showAdvFig(){
 
 function opt() {
     var modal = $('#sourcemodel option:selected').val();
-    var layer = $('#second option:selected').text();
+    var layer = $('#second option:selected').val();
     var move = document.getElementById('max_move').value;
     var times = document.getElementById('move_times').value;
     var steps = document.getElementById('step_times').value;
@@ -426,35 +427,42 @@ function nextChange() {
     var second = document.getElementById("second");
     second.options.length = 0; // 清除second下拉框的所有内容
     if (first.selectedIndex == 1) {
-        second.options.add(new Option("conv1_2", "0", false, true));  // 默认选中区
-        second.options.add(new Option("conv2_2", "4"));
-        second.options.add(new Option("conv3_3", "2"));
-        second.options.add(new Option("conv4_3", "2"));
-        second.options.add(new Option("conv5_3", "1"));
+        second.options.add(new Option("conv1_2", "conv1_2", false, true));  // 默认选中区
+        second.options.add(new Option("conv2_2", "conv2_2"));
+        second.options.add(new Option("conv3_3", "conv3_3"));
+        second.options.add(new Option("conv4_3", "conv4_3"));
+        second.options.add(new Option("conv5_3", "conv5_3"));
     }
 
     if (first.selectedIndex == 2) {
-        second.options.add(new Option("conv2d_2b", "0", false, true));  // 默认选中区
-        second.options.add(new Option("conv2d_4a", "1"));
-        second.options.add(new Option("mixed_5b", "2"));
-        second.options.add(new Option("mixed_6a", "3"));
-        second.options.add(new Option("mixed_7a", "4"));
+        second.options.add(new Option("conv2d_2b", "conv2d_2b", false, true));  // 默认选中区
+        second.options.add(new Option("conv2d_4a", "conv2d_4a"));
+        second.options.add(new Option("mixed_5b", "mixed_5b"));
+        second.options.add(new Option("mixed_6a", "mixed_6a"));
+        second.options.add(new Option("mixed_7a", "mixed_7a"));
     }
 
     if (first.selectedIndex == 3) {
-        second.options.add(new Option("conv2d_2b", "0", false, true));  // 默认选中区
-        second.options.add(new Option("conv2d_4a", "1"));
-        second.options.add(new Option("mixed_5b", "2"));
-        second.options.add(new Option("mixed_6a", "3"));
-        second.options.add(new Option("mixed_7a", "4"));
+        second.options.add(new Option("conv2d_2b", "conv2d_2b", false, true));  // 默认选中区
+        second.options.add(new Option("conv2d_4a", "conv2d_4a"));
+        second.options.add(new Option("mixed_5b", "mixed_5b"));
+        second.options.add(new Option("mixed_6a", "mixed_6a"));
+        second.options.add(new Option("mixed_7a", "mixed_7a"));
     }
 
+    // if (first.selectedIndex == 4) {
+    //     second.options.add(new Option("block1/unit_3", "0", false, true));  // 默认选中区
+    //     second.options.add(new Option("block1/unit_8", "1"));
+    //     second.options.add(new Option("block1/unit_18", "2"));
+    //     second.options.add(new Option("block1/unit_36", "3"));
+    //     second.options.add(new Option("block1/unit_3", "4"));
+    // }
     if (first.selectedIndex == 4) {
-        second.options.add(new Option("block1/unit_3", "0", false, true));  // 默认选中区
-        second.options.add(new Option("block1/unit_8", "1"));
-        second.options.add(new Option("block1/unit_18", "2"));
-        second.options.add(new Option("block1/unit_36", "3"));
-        second.options.add(new Option("block1/unit_3", "4"));
+        second.options.add(new Option("block1/unit_3", "conv1_2", false, true));  // 默认选中区
+        second.options.add(new Option("block1/unit_8", "conv2_2"));
+        second.options.add(new Option("block1/unit_18", "conv3_3"));
+        second.options.add(new Option("block1/unit_36", "conv4_3"));
+        second.options.add(new Option("block1/unit_3", "conv5_3"));
     }
 }
 function heatmappshow(BackboxResult, model_names){

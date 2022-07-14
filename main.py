@@ -17,6 +17,7 @@ Backboxdict = {}
 Backboxlist = []
 whileflag = 0
 Eofdata = False
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.getcwd()
@@ -87,7 +88,7 @@ def run_attack(paras):
     global Eofdata
     Eofdata = False
     _ = None
-    attack.FLAGS.model_name = paras["model_name"]
+    attack.FLAGS.model_name = str(paras["model_name"])
     attack.FLAGS.layer_name = paras["model_name"] + "/" + paras["layer_name"][:-2] + "/" + paras["layer_name"] + "/" + "Relu"
     attack.FLAGS.input_dir = "./static/res/tmp/ori/"
     attack.FLAGS.output_dir = "./static/res/tmp/adv/"+paras["tid"]+'/'
@@ -115,11 +116,12 @@ def get_advresult():
         # print('filee为%s' %os.path.abspath(filee))
         # if os.path.isfile(filee):
     # print(files[0])
-    if not os.path.exists(path):
-        return json.dumps({"Eof": False})
-    if len(os.listdir(path)):
-        print('adv不为空,tid为 %s ' % tid)
-        return json.dumps({"Eof": True})
+    if os.path.exists(path):
+        if len(os.listdir(path)):
+            print('adv不为空,tid为 %s ' % tid)
+            return json.dumps({"Eof": True})
+        else:
+            return json.dumps({"Eof": False})
     else:
         return json.dumps({"Eof": False})
     # if os.path.isdir(path):
@@ -272,5 +274,6 @@ def get_backbox():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='24109', debug=True)
+    app.run(host='0.0.0.0', port='8880', debug=True)
+    # app.run(host='0.0.0.0', port='8080', debug=True)
     # app.run(debug=True)
